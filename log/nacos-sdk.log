@@ -1,0 +1,29 @@
+2022-09-01T15:56:15.795+0800	[34mINFO[0m	clients/client_factory.go:47	logDir:</Users/cc/bz/goweb/service-cloud-monitoring/log>   cacheDir:</Users/cc/bz/goweb/service-cloud-monitoring/cache>
+2022-09-01T15:56:15.798+0800	[31mERROR[0m	nacos_server/nacos_server.go:194	api</v1/cs/configs>,method:<GET>, params:<{"dataId":"service-cloud-monitor.yml","group":"lottery"}>, call domain error:<[404] config data not exist
+> , result:<config data not exist
+>
+2022-09-01T15:56:15.800+0800	[31mERROR[0m	nacos_server/nacos_server.go:194	api</v1/cs/configs>,method:<GET>, params:<{"dataId":"service-cloud-monitor.yml","group":"lottery"}>, call domain error:<[404] config data not exist
+> , result:<config data not exist
+>
+2022-09-01T15:56:15.801+0800	[31mERROR[0m	nacos_server/nacos_server.go:194	api</v1/cs/configs>,method:<GET>, params:<{"dataId":"service-cloud-monitor.yml","group":"lottery"}>, call domain error:<[404] config data not exist
+> , result:<config data not exist
+>
+2022-09-01T15:56:15.801+0800	[31mERROR[0m	config_client/config_client.go:202	get config from server error:[404] config data not exist
+ 
+2022-09-01T15:56:15.802+0800	[33mWARN[0m	config_client/config_client.go:207	[client.GetConfig] config not found, dataId: service-cloud-monitor.yml, group: lottery, namespaceId: .
+2022-09-01T15:57:11.653+0800	[34mINFO[0m	clients/client_factory.go:47	logDir:</Users/cc/bz/goweb/service-cloud-monitoring/log>   cacheDir:</Users/cc/bz/goweb/service-cloud-monitoring/cache>
+2022-09-01T15:57:11.657+0800	[31mERROR[0m	nacos_server/nacos_server.go:194	api</v1/cs/configs>,method:<GET>, params:<{"dataId":"service-cloud-monitor.yml","group":"lottery"}>, call domain error:<[404] config data not exist
+> , result:<config data not exist
+>
+2022-09-01T15:57:11.658+0800	[31mERROR[0m	nacos_server/nacos_server.go:194	api</v1/cs/configs>,method:<GET>, params:<{"dataId":"service-cloud-monitor.yml","group":"lottery"}>, call domain error:<[404] config data not exist
+> , result:<config data not exist
+>
+2022-09-01T15:57:11.659+0800	[31mERROR[0m	nacos_server/nacos_server.go:194	api</v1/cs/configs>,method:<GET>, params:<{"dataId":"service-cloud-monitor.yml","group":"lottery"}>, call domain error:<[404] config data not exist
+> , result:<config data not exist
+>
+2022-09-01T15:57:11.659+0800	[31mERROR[0m	config_client/config_client.go:202	get config from server error:[404] config data not exist
+ 
+2022-09-01T15:57:11.659+0800	[33mWARN[0m	config_client/config_client.go:207	[client.GetConfig] config not found, dataId: service-cloud-monitor.yml, group: lottery, namespaceId: .
+2022-09-01T15:57:53.338+0800	[34mINFO[0m	clients/client_factory.go:47	logDir:</Users/cc/bz/goweb/service-cloud-monitoring/log>   cacheDir:</Users/cc/bz/goweb/service-cloud-monitoring/cache>
+2022-09-01T16:01:09.549+0800	[34mINFO[0m	clients/client_factory.go:47	logDir:</Users/cc/bz/goweb/service-cloud-monitoring/log>   cacheDir:</Users/cc/bz/goweb/service-cloud-monitoring/cache>
+2022-09-01T16:04:29.099+0800	[34mINFO[0m	clients/client_factory.go:47	logDir:</Users/cc/bz/goweb/service-cloud-monitoring/log>   cacheDir:</Users/cc/bz/goweb/service-cloud-monitoring/cache>
