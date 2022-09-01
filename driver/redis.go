@@ -2,26 +2,26 @@ package driver
 
 import (
 	"bz.service.cloud.monitoring/utils"
-	"github.com/go-xorm/xorm"
-
 	_ "github.com/go-sql-driver/mysql"
+	"gopkg.in/redis.v5"
 )
 
-var My *MysqlConfig
+var Rc *RedisConfig
 
-type MysqlConfig struct {
-	DbDsn   string
-	ShowSQL bool
+type RedisConfig struct {
+	RedisAddr string
+	Password  string
+	RedisDb   int
 }
 
-// CreateMysql
-func (m *MysqlConfig) CreateMysql(config MysqlConfig) (*xorm.Engine, error) {
-	mysql, err := xorm.NewEngine("mysql", config.DbDsn)
-	if err != nil {
-		return nil, err
-	}
-	mysql.ShowSQL(config.ShowSQL)
-	err = mysql.Ping()
+// CreateRedis
+func (r *RedisConfig) CreateRedis(config RedisConfig) (*redis.Client, error) {
+	rc := redis.NewClient(&redis.Options{
+		Addr:     config.RedisAddr,
+		Password: config.Password,
+		DB:       config.RedisDb,
+	})
+	_, err := rc.Ping().Result()
 	utils.CheckErr(err)
-	return mysql, nil
+	return rc, nil
 }
