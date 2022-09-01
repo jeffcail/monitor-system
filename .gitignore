@@ -6,3 +6,4 @@ cache
 /log
 service-cloud-monitoring
 service-cloud-monitoring.exe
+web/node_modules
