@@ -3,7 +3,10 @@
 .DS_Store
 cache
 .git
-/log
-service-cloud-monitoring
-service-cloud-monitoring.exe
-web/node_modules
+server/log
+client/log
+server/service-cloud-monitoring-server
+server/service-cloud-monitoring-server.exe
+client/service-cloud-monitoring-client
+client/service-cloud-monitoring-client.exe
+server/web/node_modules
