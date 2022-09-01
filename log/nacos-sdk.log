@@ -27,3 +27,4 @@
 2022-09-01T15:57:53.338+0800	[34mINFO[0m	clients/client_factory.go:47	logDir:</Users/cc/bz/goweb/service-cloud-monitoring/log>   cacheDir:</Users/cc/bz/goweb/service-cloud-monitoring/cache>
 2022-09-01T16:01:09.549+0800	[34mINFO[0m	clients/client_factory.go:47	logDir:</Users/cc/bz/goweb/service-cloud-monitoring/log>   cacheDir:</Users/cc/bz/goweb/service-cloud-monitoring/cache>
 2022-09-01T16:04:29.099+0800	[34mINFO[0m	clients/client_factory.go:47	logDir:</Users/cc/bz/goweb/service-cloud-monitoring/log>   cacheDir:</Users/cc/bz/goweb/service-cloud-monitoring/cache>
+2022-09-01T19:44:39.664+0800	[34mINFO[0m	clients/client_factory.go:47	logDir:</Users/cc/bz/goweb/service-cloud-monitoring/log>   cacheDir:</Users/cc/bz/goweb/service-cloud-monitoring/cache>

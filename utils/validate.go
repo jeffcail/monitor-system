@@ -1,16 +1,14 @@
 package utils
 
 import (
-	"github.com/go-playground/validator/v10"
-	"github.com/labstack/echo"
-
 	validate2 "bz.service.cloud.monitoring/pkg/validate"
+	"github.com/go-playground/validator/v10"
 )
 
 var msg string
 
 // ValidateParam
-func ValidateParam(c echo.Context, params interface{}) string {
+func ValidateParam(params interface{}) string {
 	translator, validate := validate2.Bv.BindValidate()
 	err := validate.Struct(params)
 	if err != nil {
