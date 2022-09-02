@@ -21,6 +21,15 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: '首页看板',
         }
+      },
+      // 服务检测列表
+      {
+        path: "/monitor/serve/list",
+        name: "/monitor/serve/list",
+        component: () => import("@/views/serve/serve.vue"),
+        meta: {
+          title: "服务检测"
+        }
       }
     ]
   },

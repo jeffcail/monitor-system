@@ -12,9 +12,9 @@
                     unique-opened
                     router
                 >
-                    <el-menu-item index="board" @click="goUrl('服务于监控系统','','board')" style="height: 50px !important;background-color: var(--el-menu-hover-bg-color)  !important;">
+                    <el-menu-item index="board" @click="goUrl('服务云监控系统','','board')" style="height: 50px !important;background-color: var(--el-menu-hover-bg-color)  !important;">
                         <img src="@/assets/images/logo.png">
-                        <span class="backstage-manage">服务于监控系统</span>
+                        <span class="backstage-manage">服务云监控系统</span>
                     </el-menu-item>
             
                     <el-sub-menu :index="index" v-for="(item,index) in store.state.menuListAll" :key="index">
@@ -115,6 +115,13 @@ const goUrl = (authName, authName2, url) => {
     store.commit("activeName", authName2);
     sessionStorage.setItem(`url`,`${url}`)
     activePath.value = sessionStorage.getItem(`url`)   
+}
+
+// 退出登陆
+const loginOut = () => {
+    localStorage.clear()
+    sessionStorage.removeItem("url")
+    router.push("/monitor/login")
 }
 
 </script>
