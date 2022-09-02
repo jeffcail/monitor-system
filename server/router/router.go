@@ -49,5 +49,21 @@ func RunServer() {
 		menu.GET("/list", handler.MenusList)
 	}
 
+	// 服务检测路由租
+	serve := e.Group("/api/serve")
+	serve.Use(middle.AuthCheck())
+	{
+		serve.POST("/create", handler.CreateServe)
+		serve.POST("/delete", handler.DeleteServe)
+		serve.POST("/list", handler.ServeList)
+	}
+
+	// 机器路由组
+	machine := e.Group("/api/machine")
+	machine.Use(middle.AuthCheck())
+	{
+		machine.POST("/list", handler.MachineList)
+	}
+
 	e.Logger.Fatal(e.Start(config.Config().HTTPBind))
 }

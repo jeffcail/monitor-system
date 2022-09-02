@@ -15,8 +15,8 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       // 首页看板
       {
-        path: "/monitory/board",
-        name: "/monitory/board",
+        path: "/monitor/board",
+        name: "/monitor/board",
         component: () => import("@/views/board/board.vue"),
         meta: {
           title: '首页看板',
