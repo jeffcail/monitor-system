@@ -23,7 +23,7 @@ func AdminRegister(e echo.Context) error {
 
 	res, _ := service.AdminRegister(params, e.Request().URL.Path, e.Request().Method)
 	if !res {
-		return e.JSON(http.StatusBadRequest, "")
+
 		return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Fail, "用户注册失败", ""))
 	}
 	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "管理员用户注册成功！", ""))
