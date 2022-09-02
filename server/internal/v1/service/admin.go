@@ -30,13 +30,13 @@ func AdminRegister(params *params.AdminParam, url, method string) (bool, error) 
 	}
 	err = daos.AddAdmin(vo)
 	if err != nil {
-		ubzer.MLog.Error(fmt.Sprintf("账号: %v 注册失败", params.Username), zap.Error(err))
+		ubzer.MLog.Error(fmt.Sprintf("账号: %v 创建失败", params.Username), zap.Error(err))
 		return false, err
 	}
-	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf("%v 在 %v 成功注册成为管理员用户",
-		admin.Username, admin.CreatedAt))
+	err = daos.RecordOperateLog(vo.Id, vo.Username, vo.RealName, url, method, fmt.Sprintf("管理员账号：%v 在 %v 成功创建",
+		vo.Username, vo.CreatedAt))
 	if err != nil {
-		ubzer.MLog.Error(fmt.Sprintf("账号: %v 注册时记录日志失败", params.Username), zap.Error(err))
+		ubzer.MLog.Error(fmt.Sprintf("账号: %v 创建时记录日志失败", params.Username), zap.Error(err))
 	}
 	return true, nil
 }

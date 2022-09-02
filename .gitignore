@@ -5,8 +5,8 @@ cache
 .git
 server/log
 client/log
-server/service-cloud-monitoring-server
-server/service-cloud-monitoring-server.exe
-client/service-cloud-monitoring-client
-client/service-cloud-monitoring-client.exe
+server/service-cloud-monitoring
+server/service-cloud-monitoring.exe
+client/client
+client/client.exe
 server/web/node_modules

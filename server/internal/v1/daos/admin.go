@@ -42,3 +42,15 @@ func AddAdmin(admin *models.MonAdmin) error {
 	}
 	return nil
 }
+
+// 查询
+//func SelAdmin(admin *models.MonAdmin,params *params2.ServeListParams) (int64,[]*models.MonAdmin,error) {
+//	list:=make([]*models.MonAdmin, 0)
+//	var query *xorm.Session
+//	query = db.Mysql.Limit(params.PageSize, (params.Page-1)*params.PageSize)
+//	count,_ :=query.Count(&admin)
+//	query.Desc("id")
+//
+//
+//	return
+//}

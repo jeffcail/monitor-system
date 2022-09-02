@@ -7,7 +7,22 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/monitor',
     name: '/monitor/index',
-    component: Index
+    component: Index,
+    redirect: '/monitor/board',
+    meta: {
+      title: "首页看板"
+    },
+    children: [
+      // 首页看板
+      {
+        path: "/monitor/board",
+        name: "/monitor/board",
+        component: () => import("@/views/board/board.vue"),
+        meta: {
+          title: '首页看板',
+        }
+      }
+    ]
   },
   {
     path: '/monitor/login',
