@@ -25,7 +25,8 @@ func ServeList(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "查看列表失败", ""))
 	}
-	return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "成功", utils.Resp.ResponsePagination(count, data)))
+	return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "成功",
+		utils.Resp.ResponsePagination(count, data)))
 }
 
 // CreateServe
