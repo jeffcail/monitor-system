@@ -1,10 +1,9 @@
 package daos
 
 import (
-	"errors"
-
 	"bz.service.cloud.monitoring/common/db"
 	"bz.service.cloud.monitoring/server/internal/v1/models"
+	"errors"
 )
 
 // GetAdminInfoByUsername
@@ -28,6 +27,18 @@ func UpdateAdminById(admin *models.MonAdmin) error {
 	}
 	if affected != 1 {
 		return errors.New("登陆出现异常")
+	}
+	return nil
+}
+
+// 管理员插入
+func AddAdmin(admin *models.MonAdmin) error {
+	count, err := db.Mysql.Insert(admin)
+	if err != nil {
+		return err
+	}
+	if count != 1 {
+		return errors.New("添加不是1条")
 	}
 	return nil
 }

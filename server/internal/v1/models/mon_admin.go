@@ -15,9 +15,9 @@ type MonAdmin struct {
 	OfficePost    string    `json:"office_post" xorm:"comment('职位') VARCHAR(255)"`
 	State         int       `json:"state" xorm:"not null default 2 comment('状态 1: 正常 2: 禁用') INT"`
 	LastLoginTime time.Time `json:"last_login_time" xorm:"comment('上次登陆时间') TIMESTAMP"`
-	CreatedAt     time.Time `json:"created_at" xorm:"not null default 'CURRENT_TIMESTAMP' comment('创建时间') TIMESTAMP"`
-	UpdatedAt     time.Time `json:"updated_at" xorm:"not null default 'CURRENT_TIMESTAMP' comment('更新时间') TIMESTAMP"`
-	Version       int64     `json:"version" xorm:"not null comment('版本号') BIGINT"`
+	CreatedAt     time.Time `json:"created_at" xorm:"created not null default 'CURRENT_TIMESTAMP' comment('创建时间') TIMESTAMP"`
+	UpdatedAt     time.Time `json:"updated_at" xorm:"updated not null default 'CURRENT_TIMESTAMP' comment('更新时间') TIMESTAMP"`
+	Version       int64     `json:"version" xorm:"version not null comment('版本号') BIGINT"`
 }
 
 func (m *MonAdmin) TableName() string {

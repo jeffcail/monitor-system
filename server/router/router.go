@@ -41,5 +41,10 @@ func RunServer() {
 	// 登陆
 	e.POST("/api/login", handler.Login)
 
+	admin := e.Group("/api/admin")
+	{
+		admin.POST("/register", handler.AdminRegister) //管理员注册
+	}
+
 	e.Logger.Fatal(e.Start(config.Config().HTTPBind))
 }
