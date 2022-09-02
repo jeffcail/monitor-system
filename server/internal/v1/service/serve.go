@@ -27,8 +27,33 @@ type ServeListView struct {
 }
 
 // ServeList
-func ServeList(params *params2.ServeListParams, admin *models.MonAdmin, url string, method string) {
-	list, serves, err := daos.ServeList(params)
+func ServeList(params *params2.ServeListParams, admin *models.MonAdmin, url string, method string) (int64, []*ServeListView, error) {
+	t := time.Now().Format(_const.Layout)
+	count, serves, err := daos.ServeList(params)
+	data := make([]*ServeListView, 0)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 查看服务检测列表获取数据失败", admin.Username, time.Now().Format(_const.Layout)))
+		return 0, nil, errors.New("服务检测列表获取失败")
+	}
+
+	for _, v := range serves {
+		slv := &ServeListView{}
+		slv.Id = v.Id
+		slv.ServeName = v.ServeName
+		slv.ServeAddress = v.ServeAddress
+		slv.LastCheckTime = v.LastCheckTime.Format(_const.Layout)
+		slv.ServeState = v.ServeState
+
+		data = append(data, slv)
+	}
+
+	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf("%v 在 %v 查看了服务检测列表",
+		admin.Username, t))
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("记录 %v 在 %v 查看服务检测列表日志失败", admin.Username, t))
+	}
+
+	return count, data, nil
 }
 
 var serveState int

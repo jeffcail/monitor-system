@@ -21,7 +21,12 @@ func ServeList(c echo.Context) error {
 	if msg != "" {
 		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, msg, ""))
 	}
-	service.ServeList(params, GetAdminInfoFromParseToken(c), c.Request().URL.Path, c.Request().Method)
+	count, data, err := service.ServeList(params, GetAdminInfoFromParseToken(c), c.Request().URL.Path, c.Request().Method)
+	if err != nil {
+		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "查看列表失败", ""))
+	}
+	return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "成功",
+		utils.Resp.ResponsePagination(count, data)))
 }
 
 // CreateServe
