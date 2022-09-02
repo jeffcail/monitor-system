@@ -3,23 +3,59 @@
         <Particles id="tsparticles"  :options= options />
         <div class="manageLogin-signin">
             <div class="manageLogin-signin-title">服务云监控系统登录</div>
-            <el-form ref="formRef" class="login-form" :rules="rules">
+            <el-form ref="formRef" class="login-form" :model="form" :rules="rules">
                 <el-form-item prop="username">
                     <i class="iconfont icon-denglu"></i>
-                    <el-input placeholder="请输入您用户名"></el-input>
+                    <el-input v-model="form.username" placeholder="请输入您用户名"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <i class="iconfont icon-mima"></i>
-                    <el-input type="password" placeholder="请输入您密码"></el-input>
+                    <el-input type="password" v-model="form.password" placeholder="请输入您密码"></el-input>
                 </el-form-item>
                 <el-form-item >
-                    <el-button type="primary" >登录</el-button>
+                    <el-button type="primary" @click="onSubmit">登录</el-button>
                 </el-form-item>
             </el-form>
         </div>
     </div>
 </template>
 <script setup>
+import { ref, relative } from 'vue'
+import { login } from "@/request/api"
+import { useRouter } from "vue-router";
+import store from "@/store/index.ts"
+const router = useRouter()
+const form = ref({
+    username: "",
+    password: "",
+})
+
+const rules = ref({
+    username: [{ required: true, message: '请输入用户名', trigger: 'blur'}],
+    password: [{ required: true, message: '请输入密码', trigger: 'blur'}]
+})
+
+const formRef = ref(null)
+const onSubmit = () => {
+    formRef.value.validate(async valid => {
+        if(valid){
+            let res = await login(JSON.stringify(form.value))
+            if (res) {
+                window.localStorage.setItem('token', res.data.token);
+                    window.localStorage.setItem('username', res.data.username);
+                    router.replace("/monitor")
+                    store.dispatch("loadmenuList");
+            }
+        } else {
+            console.log("请填写完整");
+        }
+    })
+}
+window.addEventListener("popstate", function(e) {
+    history.pushState(null, null, document.URL);
+}, false)
+
+
 
 </script>
 

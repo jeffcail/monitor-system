@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cast"
 
+	"bz.service.cloud.monitoring/common/utils"
 	params2 "bz.service.cloud.monitoring/server/internal/v1/params"
 	"bz.service.cloud.monitoring/server/internal/v1/service"
-	"bz.service.cloud.monitoring/server/utils"
 	"github.com/labstack/echo"
 )
 
@@ -27,8 +27,8 @@ func Login(c echo.Context) error {
 	}
 
 	type loginResult struct {
-		Token    string
-		Username string
+		Token    string `json:"token"`
+		Username string `json:"username"`
 	}
 	lr := &loginResult{
 		Token:    res,

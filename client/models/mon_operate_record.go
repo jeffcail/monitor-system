@@ -12,7 +12,7 @@ type MonOperateRecord struct {
 	Url           string    `json:"url" xorm:"not null comment('api路径') VARCHAR(255)"`
 	Method        string    `json:"method" xorm:"not null comment('方法') VARCHAR(255)"`
 	Content       string    `json:"content" xorm:"not null comment('操作内容') TEXT"`
-	CreatedAt     time.Time `json:"created_at" xorm:"created not null default 'CURRENT_TIMESTAMP' comment('创建时间') TIMESTAMP"`
+	CreatedAt     time.Time `json:"created_at" xorm:"created not null default 'CURRENT_TIMESTAMP' comment('操作时间') TIMESTAMP"`
 	UpdatedAt     time.Time `json:"updated_at" xorm:"updated not null default 'CURRENT_TIMESTAMP' comment('更新时间') TIMESTAMP"`
 	Version       int64     `json:"version" xorm:"not null comment('版本号') BIGINT"`
 }

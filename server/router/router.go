@@ -9,6 +9,7 @@ import (
 	"bz.service.cloud.monitoring/common/ubzer"
 	"bz.service.cloud.monitoring/server/bootstarp"
 	"bz.service.cloud.monitoring/server/config"
+	middle "bz.service.cloud.monitoring/server/internal/v1/middlewares"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -40,6 +41,13 @@ func RunServer() {
 
 	// 登陆
 	e.POST("/api/login", handler.Login)
+
+	// 菜单路由组
+	menu := e.Group("/api/menus")
+	menu.Use(middle.AuthCheck())
+	{
+		menu.GET("/list", handler.MenusList)
+	}
 
 	e.Logger.Fatal(e.Start(config.Config().HTTPBind))
 }
