@@ -65,6 +65,7 @@ func RunServer() {
 		serve.POST("/create", handler.CreateServe)
 		serve.POST("/delete", handler.DeleteServe)
 		serve.POST("/list", handler.ServeList)
+		serve.POST("/upgrade", handler.UpgradeServe)
 	}
 
 	// 机器路由组
@@ -73,8 +74,10 @@ func RunServer() {
 	{
 		machine.POST("/list", handler.MachineList)
 		machine.GET("/all", handler.AllMachine)
+		//machine.GET("/ssh", handler.RunWebSSH)
 		//machine.POST("/delete", handler.DeleteMachine)
 	}
+	e.GET("/ssh", handler.RunWebSSH)
 
 	e.Logger.Fatal(e.Start(config.Config().HTTPBind))
 }

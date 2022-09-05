@@ -69,6 +69,12 @@
                     @click="handleDelete(row)"
                     >删除</el-button
                     >
+                    <el-button
+                    size="small"
+                    type="primary"
+                    @click="upgradeApp(row)"
+                    >升级</el-button
+                    >
             </el-table-column>
         </el-table>
 
@@ -93,7 +99,7 @@
 <script setup>
 import { ref, reactive, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router';
-import { serveList, deleteServe, createServe } from '@/request/api'
+import { serveList, deleteServe, createServe, upgradeServe } from '@/request/api'
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 const small = ref(false);
@@ -101,6 +107,23 @@ const disabled = ref(false);
 const background = ref(false)
 
 const router = useRouter();
+
+// 升级服务
+const upgradeApp = (row) => {
+    ElMessageBox.confirm(`确定升级${row.serve_name}服务吗?`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+    }).then(()=>{
+        let request = {
+            serve_address: row.serve_address,
+        }
+    let res = upgradeServe(request)
+        // requestServeList()
+    }).catch(()=>{
+            ElMessage.warning('取消升级')
+    })
+}
 
 const ruleForm = ref({
     serve_address: "",
@@ -160,7 +183,7 @@ const serve1 = ref();
 const requestServeList = async () => {
 
     clearTimeout(serve1.value)
-    serve1.value = setTimeout(()=>requestServeList(),10000)
+    serve1.value = setTimeout(()=>requestServeList(),1000000)
 
     let request = {
         page: formJsonIn.value.page,

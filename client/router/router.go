@@ -24,6 +24,11 @@ func RunClientServer() {
 		sys.GET("/mem", machine.GetMemSample)
 		sys.GET("/disk", machine.GetDiskSample)
 	}
+	// 服务升级指令
+	serve := e.Group("/c/serve")
+	{
+		serve.GET("/upgrade", machine.ServeUpgrade)
+	}
 
 	e.Logger.Fatal(e.Start(config.Config().ClientHttpBind))
 }
