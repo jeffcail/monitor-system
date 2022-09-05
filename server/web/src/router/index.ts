@@ -30,6 +30,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: "服务检测"
         }
+      },
+      // 客户端机器列表
+      {
+        path: "/monitor/machine/list",
+        name: "/monitor/machine/list",
+        component: () => import("@/views/machine/machine.vue"),
       }
     ]
   },

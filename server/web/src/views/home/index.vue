@@ -87,7 +87,7 @@ const initMenusList = async () => {
     if(!window.localStorage.getItem("token")){
         router.push("/monitor/login")                                                                                                                                                      
     }else{
-        console.log(store.state.menuListAll);
+        // console.log(store.state.menuListAll);
         store.state.menuListAll.length || store.dispatch("loadmenuList");
     }
 }

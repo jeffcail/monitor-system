@@ -25,3 +25,14 @@ export const createServe = (params: any) => {
 export const deleteServe = (params: any) => {
     return axios.postJson(params, "/api/serve/delete")
 }
+
+// 机器
+// 机器列表
+export const machineList = (params: any) => {
+    return axios.postJson(params, "/api/machine/list")
+}
+
+// 所有机器
+export const allMachine = () => {
+    return axios.getJson("", "/api/machine/all")
+}
