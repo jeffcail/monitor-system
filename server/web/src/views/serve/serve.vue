@@ -1,13 +1,41 @@
 <template>
+
+    <div>
+        <div class="addServe-info">
+        <div class="addServe-title" align="left">添加服务检测</div>
+        <el-form
+            ref="ruleFormRef"
+            :model="ruleForm"
+            :rules="rules"
+            status-icon
+            label-width="120px"
+            class="demo-ruleForm"
+        >
+            <el-form-item label="地址" prop="channelId">
+                <el-input v-model="ruleForm.serve_address" style="width: 500px" type="text" autocomplete="off" ></el-input>
+            </el-form-item>
+            <el-form-item label="名称" prop="url">
+                <el-input v-model="ruleForm.serve_name" style="width: 500px" type="text" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="submitForm()">添加</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+    </div>
+
+
+
     <div class="serve-list">
         <el-table :data="tableData" style="width: 100%">
            
-            <el-table-column label="名称" width="180">
+            <el-table-column label="名称" width="280">
             <template #default="scope">
                 <el-popover effect="light" trigger="hover" placement="top" width="auto">
                 <template #default>
-                    <div>serve_name: {{ scope.row.serve_name }}</div>
-                    <div>address: {{ scope.row.address }}</div>
+                    <!-- <div>serve_name: {{ scope.row.serve_name }}</div> -->
+                    <div>{{ scope.row.serve_address }}</div>
                 </template>
                 <template #reference>
                     <el-tag>{{ scope.row.serve_name }}</el-tag>
@@ -16,7 +44,7 @@
             </template>
             </el-table-column>
 
-            <el-table-column label="上次检测时间" width="180">
+            <el-table-column label="上次检测时间" width="280">
             <template #default="scope">
                 <div style="display: flex; align-items: center">
                 <el-icon><timer /></el-icon>
@@ -25,24 +53,22 @@
             </template>
             </el-table-column>
 
-            <el-table-column label="状态" width="180">
+            <el-table-column label="状态" width="280">
             <template #default="scope">
                 <div style="display: flex; align-items: center">
-                <el-icon><timer /></el-icon>
-                <span style="margin-left: 10px">{{ scope.row.last_check_time }}</span>
+                <span style="margin-left: 10px; color: green;" v-if="scope.row.serve_state == 1"> <el-icon><SuccessFilled /></el-icon> </span>
+                <span style="margin-left: 10px; color: red;" v-else> <el-icon><WarningFilled /></el-icon> </span>
                 </div>
             </template>
             </el-table-column>
 
-            <el-table-column label="操作">
-            <template #default="scope">
-                <el-button
-                size="small"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)"
-                >删除</el-button
-                >
-            </template>
+            <el-table-column label="操作" v-slot="{ row }">
+                    <el-button
+                    size="small"
+                    type="danger"
+                    @click="handleDelete(row)"
+                    >删除</el-button
+                    >
             </el-table-column>
         </el-table>
 
@@ -60,48 +86,92 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             />
-            </div>
+        </div>
     </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-import { serveList } from '@/request/api'
+<script setup>
+import { ref, reactive, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router';
+import { serveList, deleteServe, createServe } from '@/request/api'
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 const small = ref(false);
 const disabled = ref(false);
 const background = ref(false)
 
+const router = useRouter();
 
-interface User {
-  serve_name: string
-  last_check_time: string
-  serve_state: string
+const ruleForm = ref({
+    serve_address: "",
+    serve_name: "",
+})
+
+const rules = reactive({
+    serve_address: { required: true, message: "请输入服务地址", trigger: "blur" },
+    serve_name: { required: true, message: "请输入服务名称", trigger: "blur" },
+})
+
+const ruleFormRef = ref(null);
+
+const submitForm = () => {
+    ruleFormRef.value.validate(async volid => {
+        if (volid) {
+            let request = {
+                serve_name: ruleForm.value.serve_name,
+                serve_address: ruleForm.value.serve_address,
+            }
+            let res = await createServe(request)
+            if (res.code === 2000) {
+                ElMessage.success("添加成功")
+                router.push("/monitor/serve/list")
+                requestServeList()
+            }
+        } else {
+            ElMessage.warning("请填写完整")
+        }
+    })
 }
-
-const handleDelete = (index: number, row: User) => {
-    console.log(index, row)
+const handleDelete = (row) => {
+    ElMessageBox.confirm(`确定删除${row.serve_name}吗?`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+    }).then(()=>{
+        let res = deleteServe({
+            id: row.id
+        })
+        requestServeList()
+    }).catch(()=>{
+            ElMessage.warning('取消删除')
+    })
 }
 
 const total = ref(0);
-const tableData: User[] = [];
+const tableData = ref([]);
 
 const formJsonIn = ref({
     page: 1,
-    page_size: 20,
+    page_size: 10,
 })
 
+const serve1 = ref();
+
 const requestServeList = async () => {
+
+    clearTimeout(serve1.value)
+    serve1.value = setTimeout(()=>requestServeList(),10000)
+
     let request = {
         page: formJsonIn.value.page,
         page_size: formJsonIn.value.page_size,
     }
     let res = await serveList(request)
-    console.log(res)
-    if (res.code == []) {
+    // console.log(res)
+    if (res.code !== 2000) {
         res.data = []
     }
-    tableData.values = res.data.list
+    tableData.value = res.data.list
     total.value = res.data.total
 }
 requestServeList()
@@ -117,10 +187,19 @@ const handleCurrentChange = (row) => {
     requestServeList();
 }
 
+onUnmounted (()=>{
+    clearTimeout(serve1.value)
+    clearTimeout(serve1.value)
+});
+
 </script>
 
 <style lang="scss" scoped>
 .serve-list{
     margin-left: 40px;
+}
+.addServe-title {
+    margin-left: 40px;
+    margin-bottom: 20px;
 }
 </style>
