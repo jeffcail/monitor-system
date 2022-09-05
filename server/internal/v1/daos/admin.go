@@ -3,6 +3,7 @@ package daos
 import (
 	"bz.service.cloud.monitoring/common/db"
 	"bz.service.cloud.monitoring/server/internal/v1/models"
+	"bz.service.cloud.monitoring/server/internal/v1/params"
 	"errors"
 )
 
@@ -32,8 +33,8 @@ func UpdateAdminById(admin *models.MonAdmin) error {
 }
 
 // 管理员插入
-func AddAdmin(admin *models.MonAdmin) error {
-	count, err := db.Mysql.Insert(admin)
+func AddAdmin(params *models.MonAdmin) error {
+	count, err := db.Mysql.Insert(params)
 	if err != nil {
 		return err
 	}
@@ -43,14 +44,21 @@ func AddAdmin(admin *models.MonAdmin) error {
 	return nil
 }
 
-// 查询
-//func SelAdmin(admin *models.MonAdmin,params *params2.ServeListParams) (int64,[]*models.MonAdmin,error) {
-//	list:=make([]*models.MonAdmin, 0)
-//	var query *xorm.Session
-//	query = db.Mysql.Limit(params.PageSize, (params.Page-1)*params.PageSize)
-//	count,_ :=query.Count(&admin)
-//	query.Desc("id")
-//
-//
-//	return
-//}
+// 根据输入条件查看管理员信息列表
+func SelAdmin(params *params.SelAdminParam, filter map[string]interface{}) (int64, []*models.MonAdmin, error) {
+	list := make([]*models.MonAdmin, 0)
+	query := db.Mysql.NewSession().Limit(params.PageSize, (params.Page-1)*params.PageSize) //分页
+	query2 := db.Mysql.NewSession()                                                        //统计，使用newSession时，当key,v为空时，Mysql中where关键字不生效，查询语句可正常运行
+	for k, v := range filter {
+		query.Where(k+" = ? ", v)
+		query2.Where(k+" = ? ", v)
+	}
+	//if params.Username != "" {//模糊查询写法
+	//	query.Where("username like concat('%',concat( ? ,'%'))", params.Username)
+	//}
+	count, _ := query2.Count()
+	query.Desc("id")
+	err := query.Find(&list)
+
+	return count, list, err
+}

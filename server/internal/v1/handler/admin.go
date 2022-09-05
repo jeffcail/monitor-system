@@ -5,8 +5,6 @@ import (
 	"bz.service.cloud.monitoring/common/utils"
 	"bz.service.cloud.monitoring/server/internal/v1/params"
 	"bz.service.cloud.monitoring/server/internal/v1/service"
-	"errors"
-	"fmt"
 	"github.com/labstack/echo"
 	"net/http"
 )
@@ -16,13 +14,13 @@ import (
 func AdminRegister(e echo.Context) error {
 	//实例化一个对象接受信息
 	params := &params.AdminParam{}
-	err := e.Bind(params)
-	if err != nil {
-		fmt.Println(fmt.Errorf(err.Error()))
-		return e.JSON(http.StatusBadRequest, "参数错误")
+	_ = e.Bind(params)
+	msg := utils.ValidateParam(params)
+	if msg != "" {
+		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, msg, ""))
 	}
 
-	res, _ := service.AdminRegister(params, e.Request().URL.Path, e.Request().Method)
+	res, _ := service.AdminRegister(params, GetAdminInfoFromParseToken(e), e.Request().URL.Path, e.Request().Method)
 	if !res {
 
 		return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Fail, "用户创建失败", ""))
@@ -30,18 +28,21 @@ func AdminRegister(e echo.Context) error {
 	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "管理员用户创建成功！", ""))
 }
 
-// 查询
+// 管理员信息列表查询
 func SelectAdmin(e echo.Context) error {
 	// 接参
 	params := &params.SelAdminParam{}
-	err := e.Bind(params)
-	if err != nil {
-		fmt.Println(fmt.Errorf(err.Error()))
-		return e.JSON(http.StatusBadRequest, "参数错误")
+	_ = e.Bind(params)
+	msg := utils.ValidateParam(params)
+	if msg != "" {
+		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, msg, ""))
 	}
 	// 请求service
-	total, list, err := int64(0), make([]*string, 0), errors.New("")
+	count, list, err := service.SelAdmin(params, GetAdminInfoFromParseToken(e), e.Request().URL.Path, e.Request().Method)
+	if err != nil {
+		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "查询失败", ""))
+	}
 	// 返回
-	data := utils.Resp.ResponsePagination(total, list)
-	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "管理员信息更改成功！", data))
+	data := utils.Resp.ResponsePagination(count, list) //拼接
+	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "成功！", data))
 }

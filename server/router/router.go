@@ -42,11 +42,15 @@ func RunServer() {
 	// 登陆
 	e.POST("/api/login", handler.Login)
 
-<<<<<<< HEAD
+	//管理员增删改查
 	admin := e.Group("/api/admin")
 	{
-		admin.POST("/register", handler.AdminRegister) //管理员注册
-=======
+		//新管理员创建
+		admin.POST("/register", handler.AdminRegister)
+		//查看管理员信息列表
+		admin.POST("/select", handler.SelectAdmin)
+
+	}
 	// 菜单路由组
 	menu := e.Group("/api/menus")
 	menu.Use(middle.AuthCheck())
@@ -68,7 +72,6 @@ func RunServer() {
 	machine.Use(middle.AuthCheck())
 	{
 		machine.POST("/list", handler.MachineList)
->>>>>>> e4bbf96be5a746acaecca0cf3631fa12bb065a61
 	}
 
 	e.Logger.Fatal(e.Start(config.Config().HTTPBind))
