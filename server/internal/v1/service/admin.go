@@ -95,7 +95,8 @@ func SelAdmin(params *params.SelAdminParam, admin *models.MonAdmin, url string, 
 }
 
 func filterSelAdmin(params *params.SelAdminParam) map[string]interface{} {
-	var m map[string]interface{}
+
+	m := make(map[string]interface{})
 	if params.Username != "" {
 		m["username"] = params.Username
 	}
