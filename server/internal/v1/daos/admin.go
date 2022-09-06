@@ -86,3 +86,8 @@ func GetAdminInfoById(id int64) (*models.MonAdmin, error) {
 	}
 	return admin, nil
 }
+
+//DeleteAdminById
+//func DeleteAdminById(admin *models.MonAdmin) error {
+//	err :=
+//}

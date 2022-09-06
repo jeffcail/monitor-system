@@ -33,3 +33,8 @@ type UpdAdminParamById struct {
 	OfficePost string `json:"Office_post" ` //职位
 	State      int    `json:"state"  `      //账号状态 1: 正常  2:禁用
 }
+
+// DeleteParam
+type DeleteParam struct {
+	Id int64 `json:"id" validate:"required"`
+}

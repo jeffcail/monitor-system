@@ -66,3 +66,13 @@ func UpdateAdminById(e echo.Context) error {
 	}
 	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "变更成功！", ""))
 }
+
+// 管理员信息记录删除
+func DeleteAdminById(e echo.Context) error {
+	//接参
+	//参数验证
+	//请求service
+	//返回
+
+	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "删除成功！", ""))
+}
