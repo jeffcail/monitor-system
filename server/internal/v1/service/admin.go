@@ -114,3 +114,52 @@ func filterSelAdmin(params *params.SelAdminParam) map[string]interface{} {
 	}
 	return m
 }
+
+// PasswordValidate
+func PasswordValidate(params *params.UpdAdminParamById) string {
+	if params.Password != "" {
+		if len(params.Password) < 6 || len(params.Password) > 12 {
+			return "Password 字段要求不能小于6位或大于12位"
+		}
+
+	}
+
+	return ""
+}
+
+// UpdateAdminById
+func UpdAdminById(params *params.UpdAdminParamById, admin *models.MonAdmin, url string, method string) (int64, error) {
+	t := time.Now().Format(_const.Layout)
+	data, err := daos.GetAdminInfoById(params.Id)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 变更Id:%v 管理员信息时获取数据失败", admin.Username, t, params.Id))
+		return 0, err
+	}
+	data = &models.MonAdmin{
+		Id:            params.Id,
+		Username:      params.Username,
+		RealName:      params.RealName,
+		Phone:         params.Phone,
+		Password:      utils.GeneratePassword(params.Password, config.Config().Slat),
+		RoleId:        params.RoleId,
+		Department:    params.Department,
+		OfficePost:    params.OfficePost,
+		State:         params.State,
+		UpdatedAt:     time.Now(),
+		LastLoginTime: data.LastLoginTime,
+		CreatedAt:     data.CreatedAt,
+		Version:       data.Version,
+	}
+
+	count, err := daos.UpdAdmin(data)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 变更Id:%v 管理员信息失败", admin.Username, t, params.Id))
+		return 0, err
+	}
+	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf("%v 在 %v 修改了ID:%v管理员信息列表",
+		admin.Username, t, params.Id))
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("记录 %v 在 %v 变更管理员信息日志失败", admin.Username, t))
+	}
+	return count, nil
+}

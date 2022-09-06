@@ -46,3 +46,23 @@ func SelectAdmin(e echo.Context) error {
 	data := utils.Resp.ResponsePagination(count, list) //拼接
 	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "成功！", data))
 }
+
+// 管理员信息变更
+func UpdateAdminById(e echo.Context) error {
+	// 接参
+	params := &params.UpdAdminParamById{}
+	//参数验证
+	_ = e.Bind(params)
+	msg := utils.ValidateParam(params)
+	msg += service.PasswordValidate(params)
+	if msg != "" {
+		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, msg, ""))
+	}
+	//请求service
+	_, err := service.UpdAdminById(params, GetAdminInfoFromParseToken(e), e.Request().URL.Path, e.Request().Method)
+	//返回结果处理
+	if err != nil {
+		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "变更失败", ""))
+	}
+	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "变更成功！", ""))
+}

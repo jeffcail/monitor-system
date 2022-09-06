@@ -49,6 +49,8 @@ func RunServer() {
 		admin.POST("/register", handler.AdminRegister)
 		//查看管理员信息列表
 		admin.POST("/select", handler.SelectAdmin)
+		//根据id变更管理员信息
+		admin.POST("/update", handler.UpdateAdminById)
 
 	}
 	// 菜单路由组

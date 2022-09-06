@@ -47,18 +47,42 @@ func AddAdmin(params *models.MonAdmin) error {
 // 根据输入条件查看管理员信息列表
 func SelAdmin(params *params.SelAdminParam, filter map[string]interface{}) (int64, []*models.MonAdmin, error) {
 	list := make([]*models.MonAdmin, 0)
-	query := db.Mysql.NewSession().Limit(params.PageSize, (params.Page-1)*params.PageSize) //分页
-	query2 := db.Mysql.NewSession()                                                        //统计，使用newSession时，当key,v为空时，Mysql中where关键字不生效，查询语句可正常运行
+	query := db.Mysql.NewSession().Limit(params.PageSize, (params.Page-1)*params.PageSize)
+	query2 := db.Mysql.NewSession()
 	for k, v := range filter {
 		query.Where(k+" = ? ", v)
 		query2.Where(k+" = ? ", v)
 	}
-	//if params.Username != "" {//模糊查询写法
-	//	query.Where("username like concat('%',concat( ? ,'%'))", params.Username)
-	//}
-	count, _ := query2.Count()
-	query.Desc("id")
-	err := query.Find(&list)
 
+	count, err := query.FindAndCount(&list)
+	//count, _ := query2.Count()
+	query.Desc("id")
+	//err := query.Find(&list)
 	return count, list, err
+}
+
+// 根据id 变更管理员信息
+func UpdAdmin(bean *models.MonAdmin) (int64, error) {
+	count, err := db.Mysql.ID(bean.Id).Update(bean)
+	if err != nil {
+		return 0, err
+	}
+	if count != 1 {
+		return count, errors.New("变更不是1条")
+	}
+	return count, nil
+
+}
+
+// GetAdminInfoById
+func GetAdminInfoById(id int64) (*models.MonAdmin, error) {
+	admin := &models.MonAdmin{}
+	has, err := db.Mysql.ID(id).Get(admin)
+	if err != nil {
+		return nil, err
+	}
+	if !has {
+		return nil, errors.New("查无此用户")
+	}
+	return admin, nil
 }
