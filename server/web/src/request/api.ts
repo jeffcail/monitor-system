@@ -56,3 +56,19 @@ export const clientSysMen = (params: any) => {
 export const clientSysDisk = (params: any) => {
     return axios.postJson(params, "/api/client/sys/disk")
 }
+
+// 管理员
+// 管理员列表
+export const adminList = (params: any) => {
+    return axios.postJson(params, "/api/admin/select")
+}
+
+// 添加管理员
+export const addAdmin = (params: any) => {
+    return axios.postJson(params, "/api/admin/register")
+}
+
+// 更新管理员
+export const updateAdmin = (params: any) => {
+    return axios.postJson(params, "/api/admin/update")
+}

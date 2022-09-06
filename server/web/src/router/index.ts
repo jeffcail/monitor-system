@@ -22,6 +22,16 @@ const routes: Array<RouteRecordRaw> = [
           title: '首页看板',
         }
       },
+      // 管理员
+      // 管理员列表
+      {
+        path: "/monitor/admin/list",
+        name: "/monitor/admin/list",
+        component: () => import("@/views/admin/admin.vue"),
+        meta: {
+          title: "管理员列表"
+        }
+      },
       // 服务检测列表
       {
         path: "/monitor/serve/list",

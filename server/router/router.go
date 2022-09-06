@@ -44,6 +44,7 @@ func RunServer() {
 
 	//管理员增删改查
 	admin := e.Group("/api/admin")
+	admin.Use(middle.AuthCheck())
 	{
 		//新管理员创建
 		admin.POST("/register", handler.AdminRegister)
