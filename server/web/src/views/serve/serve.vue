@@ -72,7 +72,7 @@
                     <el-button
                     size="small"
                     type="primary"
-                    @click="upgradeApp(row)"
+                    @click="upgradeDisable= true"
                     >升级</el-button
                     >
             </el-table-column>
@@ -93,6 +93,35 @@
             @current-change="handleCurrentChange"
             />
         </div>
+
+
+        <el-dialog v-model="upgradeDisable" title="升级服务" width="30%" draggable>
+    
+            <el-form :model="upgradeForm">
+
+                <el-form-item>
+                    服务地址: <el-input v-model="upgradeForm.serve_ip" placeholder="127.0.0.1" autocomplete="off" style="width: 200px" />
+                </el-form-item>                
+
+                <el-form-item>
+                    服务包名: <el-input v-model="upgradeForm.package_name" autocomplete="off" style="width: 200px" />
+                </el-form-item>
+
+                <el-form-item>
+                    服务路径: <el-input v-model="upgradeForm.package_path" autocomplete="off" style="width: 200px" />
+                </el-form-item>
+            </el-form>
+
+            <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="upgradeDisable = false">取消升级</el-button>
+                <el-button type="primary" @click="upgradeApp">开始升级</el-button>
+            </span>
+            </template>
+        </el-dialog>
+
+
+
     </div>
 </template>
 
@@ -108,21 +137,25 @@ const background = ref(false)
 
 const router = useRouter();
 
+const upgradeDisable = ref(false);
+const upgradeForm = ref({
+    package_name: "",
+    package_path : "",
+    serve_ip: "",
+});
+
+
 // 升级服务
-const upgradeApp = (row) => {
-    ElMessageBox.confirm(`确定升级${row.serve_name}服务吗?`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-    }).then(()=>{
-        let request = {
-            serve_address: row.serve_address,
-        }
+const upgradeApp = () => {
+    let request = {
+        serve_ip: upgradeForm.value.serve_ip,
+        package_name: upgradeForm.value.package_name,
+        package_path: upgradeForm.value.package_path,
+    }
+    // console.log(request);
+
     let res = upgradeServe(request)
-        // requestServeList()
-    }).catch(()=>{
-            ElMessage.warning('取消升级')
-    })
+    requestServeList()
 }
 
 const ruleForm = ref({
@@ -183,7 +216,7 @@ const serve1 = ref();
 const requestServeList = async () => {
 
     clearTimeout(serve1.value)
-    serve1.value = setTimeout(()=>requestServeList(),1000000)
+    serve1.value = setTimeout(()=>requestServeList(),100000000)
 
     let request = {
         page: formJsonIn.value.page,

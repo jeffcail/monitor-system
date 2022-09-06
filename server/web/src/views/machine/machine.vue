@@ -128,7 +128,7 @@ const showConsole = (row) => {
     sessionStorage.setItem(`url`, `/monitor/machine/dial`)
     router.push({
         path: "/monitor/machine/dial",
-        query: {id: row.ip, name: row.name, password: row.password}
+        query: {id: row.ip}
     })
 }
 

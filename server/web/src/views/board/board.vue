@@ -5,7 +5,7 @@
                 <el-option
                     v-for="item in tableData"
                     :key="item.id"
-                    :label="item.hostname"
+                    :label="item.ip"
                     :value="item.ip"
                 />
             </el-select>

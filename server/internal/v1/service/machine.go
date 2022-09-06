@@ -20,8 +20,6 @@ type MachineListResult struct {
 	ID          int64  `json:"id"`
 	MachineCode string `json:"machine_code"`
 	Ip          string `json:"ip"`
-	Name        string `json:"name"`
-	Password    string `json:"password"`
 	HostName    string `json:"host_name"`
 	Remark      string `json:"remark"`
 	CreatedAt   string `json:"created_at"`
@@ -36,14 +34,12 @@ func MachineList(params *params2.MachineListParams) (int64, []*MachineListResult
 	}
 
 	data := make([]*MachineListResult, 0)
-	mlr := &MachineListResult{}
 
 	for _, v := range list {
+		mlr := &MachineListResult{}
 		mlr.ID = v.Id
 		mlr.MachineCode = v.MachineCode
 		mlr.Ip = v.Ip
-		mlr.Name = v.Name
-		mlr.Password = v.Password
 		mlr.HostName = v.Hostname
 		mlr.Remark = v.Remark
 		mlr.CreatedAt = v.CreatedAt.Format(_const.Layout)

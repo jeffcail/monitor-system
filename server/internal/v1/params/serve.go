@@ -19,5 +19,7 @@ type ServeListParams struct {
 
 // UpgradeServeParams
 type UpgradeServeParams struct {
-	ServeAddress string `json:"serve_address" validate:"required"`
+	ServeIp     string `json:"serve_ip" validate:"required"`
+	PackageName string `json:"package_name" validate:"required"`
+	PackagePath string `json:"package_path" validate:"required"`
 }
