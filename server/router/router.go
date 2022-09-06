@@ -55,6 +55,8 @@ func RunServer() {
 		//根据ID删除管理员信息记录
 		admin.POST("/delete", handler.DeleteAdmin)
 
+		admin.POST("/enable/disable", handler.EnableDisableAdmin)
+
 	}
 	// 菜单路由组
 	menu := e.Group("/api/menus")

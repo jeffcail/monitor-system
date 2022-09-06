@@ -1,6 +1,10 @@
 package service
 
 import (
+	"errors"
+	"fmt"
+	"time"
+
 	_const "bz.service.cloud.monitoring/common/const"
 	"bz.service.cloud.monitoring/common/ubzer"
 	"bz.service.cloud.monitoring/server/config"
@@ -8,10 +12,7 @@ import (
 	"bz.service.cloud.monitoring/server/internal/v1/models"
 	params "bz.service.cloud.monitoring/server/internal/v1/params"
 	"bz.service.cloud.monitoring/server/utils"
-	"errors"
-	"fmt"
 	"go.uber.org/zap"
-	"time"
 )
 
 func AdminRegister(params *params.AdminParam, admin *models.MonAdmin, url, method string) error {
@@ -175,5 +176,29 @@ func DeleteAdminById(params *params.DeleteParam, admin *models.MonAdmin, url str
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("记录 %v 在 %v 删除管理员信息日志失败", admin.Username, t))
 	}
+	return nil
+}
+
+// EnableDisableAdmin
+func EnableDisableAdmin(id int64, state int, admin *models.MonAdmin, url string, method string) error {
+	t := time.Now().Format(_const.Layout)
+	a, err := daos.GetAdminInfoById(id)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 启用｜禁用管理员失败", admin.Username, t), zap.Error(err))
+		return err
+	}
+	a.State = state
+	err = daos.UpdAdmin(a)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 启用｜禁用管理员失败", admin.Username, t), zap.Error(err))
+		return err
+	}
+
+	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf("%v 在 %v 启用｜禁用了管理员 :%v",
+		admin.Username, t, a.Username))
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("记录 %v 在 %v 启用｜禁用 管理员 记录日志失败", admin.Username, t))
+	}
+
 	return nil
 }

@@ -1,13 +1,14 @@
 package handler
 
 import (
+	"fmt"
+	"net/http"
+
 	_const "bz.service.cloud.monitoring/common/const"
 	"bz.service.cloud.monitoring/common/utils"
 	"bz.service.cloud.monitoring/server/internal/v1/params"
 	"bz.service.cloud.monitoring/server/internal/v1/service"
-	"fmt"
 	"github.com/labstack/echo"
-	"net/http"
 )
 
 // controller层
@@ -88,4 +89,20 @@ func DeleteAdmin(e echo.Context) error {
 		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "删除失败！", ""))
 	}
 	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "删除成功！", ""))
+}
+
+// EnableDisableAdmin
+func EnableDisableAdmin(c echo.Context) error {
+	param := &params.EnableDisableAdminParam{}
+	_ = c.Bind(param)
+	msg := utils.ValidateParam(param)
+	if msg != "" {
+		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, msg, ""))
+	}
+
+	err := service.EnableDisableAdmin(param.Id, param.State, GetAdminInfoFromParseToken(c), c.Request().URL.Path, c.Request().Method)
+	if err != nil {
+		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "失败", ""))
+	}
+	return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "成功", ""))
 }

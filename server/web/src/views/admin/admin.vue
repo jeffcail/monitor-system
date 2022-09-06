@@ -70,7 +70,7 @@
                    <el-button
                    size="small"
                    type="danger"
-                   @click="showConsole(row)"
+                   @click="handleDelete(row)"
                    >删除</el-button
                    >
            </el-table-column>
@@ -181,11 +181,43 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import {  adminList, addAdmin, updateAdmin } from '@/request/api'
+import {  adminList, addAdmin, updateAdmin, deleteAdmin, adminEnableDisable } from '@/request/api'
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
 const router = useRouter()
+
+// 状态修改
+const changeState = (row) => {
+  let res =  adminEnableDisable({
+    id: row.id,
+    state: row.state
+  })
+  
+  console.log(res);
+  if (res) {
+    if (res.code == "2000") {
+      ElMessage.success(res.msg)
+      admin_list()
+    }
+  }
+}
+
+// 删除
+const handleDelete = (row) => {
+    ElMessageBox.confirm(`确定删除 ${row.username} 吗?`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+    }).then(()=>{
+        let res = deleteAdmin({
+            id: row.id
+        })
+        admin_list()
+    }).catch(()=>{
+        ElMessage.warning('取消删除')
+    })
+}
 
 // 修改
 const updateAdminDisable = ref(false)

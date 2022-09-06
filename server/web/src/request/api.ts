@@ -72,3 +72,13 @@ export const addAdmin = (params: any) => {
 export const updateAdmin = (params: any) => {
     return axios.postJson(params, "/api/admin/update")
 }
+
+// 删除管理员
+export const deleteAdmin = (params: any) => {
+    return axios.postJson(params, "/api/admin/delete")
+}
+
+// 启用禁用管理员
+export const adminEnableDisable = (params: any) => {
+    return axios.postJson(params, "/api/admin/enable/disable")
+}

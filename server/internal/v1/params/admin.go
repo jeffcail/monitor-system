@@ -38,3 +38,9 @@ type UpdAdminParamById struct {
 type DeleteParam struct {
 	Id int64 `json:"id" validate:"required"`
 }
+
+// EnableDisableAdminParam
+type EnableDisableAdminParam struct {
+	Id    int64 `json:"id" validate:"required"`
+	State int   `json:"state" validate:"required"`
+}
