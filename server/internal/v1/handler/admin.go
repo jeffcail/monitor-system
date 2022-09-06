@@ -5,6 +5,7 @@ import (
 	"bz.service.cloud.monitoring/common/utils"
 	"bz.service.cloud.monitoring/server/internal/v1/params"
 	"bz.service.cloud.monitoring/server/internal/v1/service"
+	"fmt"
 	"github.com/labstack/echo"
 	"net/http"
 )
@@ -20,9 +21,9 @@ func AdminRegister(e echo.Context) error {
 		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, msg, ""))
 	}
 
-	res, _ := service.AdminRegister(params, GetAdminInfoFromParseToken(e), e.Request().URL.Path, e.Request().Method)
-	if !res {
-
+	err := service.AdminRegister(params, GetAdminInfoFromParseToken(e), e.Request().URL.Path, e.Request().Method)
+	if err != nil {
+		fmt.Printf("失败原因：%v\n", err)
 		return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Fail, "用户创建失败", ""))
 	}
 	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "管理员用户创建成功！", ""))
@@ -40,6 +41,7 @@ func SelectAdmin(e echo.Context) error {
 	// 请求service
 	count, list, err := service.SelAdmin(params, GetAdminInfoFromParseToken(e), e.Request().URL.Path, e.Request().Method)
 	if err != nil {
+		fmt.Printf("失败原因：%v\n", err)
 		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "查询失败", ""))
 	}
 	// 返回
@@ -59,20 +61,31 @@ func UpdateAdminById(e echo.Context) error {
 		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, msg, ""))
 	}
 	//请求service
-	_, err := service.UpdAdminById(params, GetAdminInfoFromParseToken(e), e.Request().URL.Path, e.Request().Method)
+	err := service.UpdAdminById(params, GetAdminInfoFromParseToken(e), e.Request().URL.Path, e.Request().Method)
 	//返回结果处理
 	if err != nil {
+		fmt.Printf("失败原因：%v\n", err)
 		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "变更失败", ""))
 	}
 	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "变更成功！", ""))
 }
 
 // 管理员信息记录删除
-func DeleteAdminById(e echo.Context) error {
+func DeleteAdmin(e echo.Context) error {
 	//接参
+	params := &params.DeleteParam{}
 	//参数验证
+	_ = e.Bind(params)
+	msg := utils.ValidateParam(params)
+	if msg != "" {
+		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, msg, ""))
+	}
 	//请求service
+	err := service.DeleteAdminById(params, GetAdminInfoFromParseToken(e), e.Request().URL.Path, e.Request().Method)
 	//返回
-
+	if err != nil {
+		fmt.Printf("失败原因：%v\n", err)
+		return e.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "删除失败！", ""))
+	}
 	return e.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "删除成功！", ""))
 }

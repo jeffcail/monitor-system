@@ -14,11 +14,11 @@ import (
 	"time"
 )
 
-func AdminRegister(params *params.AdminParam, admin *models.MonAdmin, url, method string) (bool, error) {
+func AdminRegister(params *params.AdminParam, admin *models.MonAdmin, url, method string) error {
 	res, err := daos.GetAdminInfoByUsername(params.Username)
 	if res != nil {
 		ubzer.MLog.Error(fmt.Sprintf(" username: %v 用户已存在", params.Username), zap.Error(err))
-		return false, errors.New("用户已存在")
+		return errors.New("用户已存在")
 	}
 	vo := &models.MonAdmin{
 		Username:   params.Username,
@@ -33,14 +33,14 @@ func AdminRegister(params *params.AdminParam, admin *models.MonAdmin, url, metho
 	err = daos.AddAdmin(vo)
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("账号: %v 创建失败", params.Username), zap.Error(err))
-		return false, err
+		return err
 	}
 	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf("管理员账号：%v 在 %v 成功创建",
 		vo.Username, vo.CreatedAt))
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("账号: %v 创建时记录日志失败", params.Username), zap.Error(err))
 	}
-	return true, nil
+	return nil
 }
 
 // 查询管理员信息所需要返回的字段
@@ -128,12 +128,12 @@ func PasswordValidate(params *params.UpdAdminParamById) string {
 }
 
 // UpdateAdminById
-func UpdAdminById(params *params.UpdAdminParamById, admin *models.MonAdmin, url string, method string) (int64, error) {
+func UpdAdminById(params *params.UpdAdminParamById, admin *models.MonAdmin, url string, method string) error {
 	t := time.Now().Format(_const.Layout)
 	data, err := daos.GetAdminInfoById(params.Id)
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 变更Id:%v 管理员信息时获取数据失败", admin.Username, t, params.Id))
-		return 0, err
+		return err
 	}
 	data = &models.MonAdmin{
 		Id:            params.Id,
@@ -151,15 +151,29 @@ func UpdAdminById(params *params.UpdAdminParamById, admin *models.MonAdmin, url 
 		Version:       data.Version,
 	}
 
-	count, err := daos.UpdAdmin(data)
+	err = daos.UpdAdmin(data)
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 变更Id:%v 管理员信息失败", admin.Username, t, params.Id))
-		return 0, err
+		return err
 	}
 	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf("%v 在 %v 修改了ID:%v管理员信息列表",
 		admin.Username, t, params.Id))
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("记录 %v 在 %v 变更管理员信息日志失败", admin.Username, t))
 	}
-	return count, nil
+	return nil
+}
+func DeleteAdminById(params *params.DeleteParam, admin *models.MonAdmin, url string, method string) error {
+	t := time.Now().Format(_const.Layout)
+	err := daos.DeleteAdminById(params.Id)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 删除Id:%v 管理员信息记录失败", admin.Username, t, params.Id))
+		return err
+	}
+	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf("%v 在 %v 删除了ID:%v管理员信息记录",
+		admin.Username, t, params.Id))
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("记录 %v 在 %v 删除管理员信息日志失败", admin.Username, t))
+	}
+	return nil
 }

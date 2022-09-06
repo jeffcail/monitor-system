@@ -62,15 +62,15 @@ func SelAdmin(params *params.SelAdminParam, filter map[string]interface{}) (int6
 }
 
 // 根据id 变更管理员信息
-func UpdAdmin(bean *models.MonAdmin) (int64, error) {
+func UpdAdmin(bean *models.MonAdmin) error {
 	count, err := db.Mysql.ID(bean.Id).Update(bean)
 	if err != nil {
-		return 0, err
+		return err
 	}
 	if count != 1 {
-		return count, errors.New("变更不是1条")
+		return errors.New("变更不是1条")
 	}
-	return count, nil
+	return nil
 
 }
 
@@ -87,7 +87,19 @@ func GetAdminInfoById(id int64) (*models.MonAdmin, error) {
 	return admin, nil
 }
 
-//DeleteAdminById
-//func DeleteAdminById(admin *models.MonAdmin) error {
-//	err :=
-//}
+// DeleteAdminById
+func DeleteAdminById(id int64) error {
+
+	admin, err := GetAdminInfoById(id)
+	if err != nil {
+		return err
+	}
+	count, err := db.Mysql.ID(id).Delete(admin)
+	if err != nil {
+		return err
+	}
+	if count != 1 {
+		return errors.New("删除失败")
+	}
+	return nil
+}

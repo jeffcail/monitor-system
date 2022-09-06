@@ -51,6 +51,8 @@ func RunServer() {
 		admin.POST("/select", handler.SelectAdmin)
 		//根据id变更管理员信息
 		admin.POST("/update", handler.UpdateAdminById)
+		//根据ID删除管理员信息记录
+		admin.POST("/delete", handler.DeleteAdmin)
 
 	}
 	// 菜单路由组
