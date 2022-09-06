@@ -21,7 +21,7 @@
 
 <script setup>
 import { ArrowDown } from '@element-plus/icons-vue'
-import { ref } from '@vue/reactivity';
+import { ref,onUnmounted } from 'vue';
 import * as echart from 'echarts';
 import { allMachine, clientSysCpu, clientSysMen, clientSysDisk } from '@/request/api';
 
@@ -104,7 +104,7 @@ all_machine()
                 ]
             });
             num2.value++
-        },2000)
+        },5000)
 
 
         const res = await clientSysMen({
@@ -141,7 +141,7 @@ all_machine()
                 ]
             });
             num3.value++
-        },2000)
+        },5000)
 
 
         const res = await clientSysDisk({
@@ -280,6 +280,12 @@ all_machine()
             chart.resize();
         };
     }
+
+    onUnmounted (()=>{
+        clearTimeout(channel1.value)
+        clearTimeout(channel2.value)
+        clearTimeout(channel3.value)
+    });
 
 </script>
 

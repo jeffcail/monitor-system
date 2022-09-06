@@ -1,4 +1,4 @@
-<template>  
+<!-- <template>  
     <div class="go_out">
         <button @click="go_out">关闭终端</button>
     </div>
@@ -90,4 +90,4 @@ const go_out = () => {
     margin-top: 20px;
     margin-bottom: 20px;
 }
-</style>
+</style> -->
