@@ -4,6 +4,10 @@ import (
 	"errors"
 	"fmt"
 
+	"bz.service.cloud.monitoring/server/internal/v1/models"
+
+	params2 "bz.service.cloud.monitoring/server/internal/v1/params"
+
 	_const "bz.service.cloud.monitoring/common/const"
 
 	"go.uber.org/zap"
@@ -22,17 +26,17 @@ type MachineListResult struct {
 }
 
 // MachineList
-func MachineList() ([]*MachineListResult, error) {
-	list, err := daos.MachineList()
+func MachineList(params *params2.MachineListParams) (int64, []*MachineListResult, error) {
+	count, list, err := daos.MachineList(params)
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("获取机器列表失败"), zap.Error(err))
-		return nil, errors.New("获取机器列表失败")
+		return 0, nil, errors.New("获取机器列表失败")
 	}
 
 	data := make([]*MachineListResult, 0)
-	mlr := &MachineListResult{}
 
 	for _, v := range list {
+		mlr := &MachineListResult{}
 		mlr.ID = v.Id
 		mlr.MachineCode = v.MachineCode
 		mlr.Ip = v.Ip
@@ -41,5 +45,20 @@ func MachineList() ([]*MachineListResult, error) {
 		mlr.CreatedAt = v.CreatedAt.Format(_const.Layout)
 		data = append(data, mlr)
 	}
-	return data, nil
+	return count, data, nil
 }
+
+// AllMachine
+func AllMachine() ([]*models.MonMachine, error) {
+	machine, err := daos.AllMachine()
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("获取所有服务器失败"), zap.Error(err))
+		return nil, err
+	}
+	return machine, nil
+}
+
+//// DeleteMachine
+//func DeleteMachine() {
+//
+//}

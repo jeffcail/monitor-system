@@ -16,3 +16,10 @@ type ServeListParams struct {
 	Page     int `json:"page" validate:"required"`
 	PageSize int `json:"page_size" validate:"required"`
 }
+
+// UpgradeServeParams
+type UpgradeServeParams struct {
+	ServeIp     string `json:"serve_ip" validate:"required"`
+	PackageName string `json:"package_name" validate:"required"`
+	PackagePath string `json:"package_path" validate:"required"`
+}

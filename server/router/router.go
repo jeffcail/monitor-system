@@ -60,6 +60,15 @@ func RunServer() {
 		menu.GET("/list", handler.MenusList)
 	}
 
+	// 首页看板
+	cs := e.Group("/api/client")
+	cs.Use(middle.AuthCheck())
+	{
+		cs.POST("/sys/cpu", handler.ClientCpuPercent)
+		cs.POST("/sys/men", handler.ClientMemPercent)
+		cs.POST("/sys/disk", handler.ClientDiskPercent)
+	}
+
 	// 服务检测路由租
 	serve := e.Group("/api/serve")
 	serve.Use(middle.AuthCheck())
@@ -67,6 +76,7 @@ func RunServer() {
 		serve.POST("/create", handler.CreateServe)
 		serve.POST("/delete", handler.DeleteServe)
 		serve.POST("/list", handler.ServeList)
+		serve.POST("/upgrade", handler.UpgradeServe)
 	}
 
 	// 机器路由组
@@ -74,7 +84,11 @@ func RunServer() {
 	machine.Use(middle.AuthCheck())
 	{
 		machine.POST("/list", handler.MachineList)
+		machine.GET("/all", handler.AllMachine)
+		//machine.GET("/ssh", handler.RunWebSSH)
+		//machine.POST("/delete", handler.DeleteMachine)
 	}
+	e.GET("/ssh", handler.RunWebSSH)
 
 	e.Logger.Fatal(e.Start(config.Config().HTTPBind))
 }

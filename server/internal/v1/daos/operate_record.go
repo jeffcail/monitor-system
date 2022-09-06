@@ -29,3 +29,20 @@ func RecordOperateLog(adminId int64, adminUserName, realName, url, method, conte
 	}
 	return nil
 }
+
+// DeleteHistoryRecordLogs
+func DeleteHistoryRecordLogs(ts time.Time) {
+	records := make([]*models.MonOperateRecord, 0)
+	err := db.Mysql.Where("created_at < ?", ts).Find(&records)
+	if err != nil {
+		return
+	}
+
+	if len(records) == 0 {
+		return
+	}
+
+	for _, v := range records {
+		db.Mysql.ID(v.Id).Delete(v)
+	}
+}
