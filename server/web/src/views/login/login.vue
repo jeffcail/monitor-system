@@ -43,7 +43,7 @@ const onSubmit = () => {
             if (res) {
                 window.localStorage.setItem('token', res.data.token);
                     window.localStorage.setItem('username', res.data.username);
-                    router.replace("/monitor")
+                    router.replace("/monitor/board")
                     store.dispatch("loadmenuList");
             }
         } else {

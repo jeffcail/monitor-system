@@ -30,5 +30,10 @@ func RunClientServer() {
 		serve.GET("/upgrade", machine.ServeUpgrade)
 	}
 
+	m := e.Group("/c/machine")
+	{
+		m.GET("/receive/com", machine.ReceiveCom)
+	}
+
 	e.Logger.Fatal(e.Start(config.Config().ClientHttpBind))
 }

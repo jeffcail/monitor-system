@@ -10,3 +10,9 @@ type MachineListParams struct {
 type DeleteMachineParams struct {
 	ID int64 `json:"id" validate:"required"`
 }
+
+// SendComParams
+type SendComParams struct {
+	Ip      string `json:"ip" validate:"required"`
+	Content string `json:"content" validate:"required"`
+}

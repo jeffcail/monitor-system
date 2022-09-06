@@ -7,6 +7,8 @@ server/log
 client/log
 server/service-cloud-monitoring
 server/service-cloud-monitoring.exe
+server/server
+server/server.exe
 client/client
 client/client.exe
 server/web/node_modules

@@ -19,6 +19,15 @@ func RunServer() {
 	e := echo.New()
 	bootstarp.InitBoot()
 
+	e.Static("/", "dist")
+	e.Static("/monitor/index", "dist")
+	e.Static("/monitor/board", "dist")
+	e.Static("/monitor/admin/list", "dist")
+	e.Static("/monitor/serve/list", "dist")
+	e.Static("/monitor/machine/list", "dist")
+	e.Static("/monitor/machine/dial", "dist")
+	e.Static("/monitor/login", "dist")
+
 	e.Use(middleware.CORSWithConfig(
 		middleware.CORSConfig{
 			AllowOrigins:     []string{"*"},
@@ -90,6 +99,7 @@ func RunServer() {
 	{
 		machine.POST("/list", handler.MachineList)
 		machine.GET("/all", handler.AllMachine)
+		machine.POST("/send/com", handler.SendCom)
 		//machine.GET("/ssh", handler.RunWebSSH)
 		//machine.POST("/delete", handler.DeleteMachine)
 	}

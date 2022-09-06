@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo "开始编译文件"
-buildFileName="service-cloud-monitoring"
+buildFileName="server"
 BuildTime=`date +'%Y.%m.%d.%H:%M:%S'`
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-w -s" -o ${buildFileName}
 echo "编译完成, 编译时间${BuildTime}"

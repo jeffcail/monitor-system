@@ -1,10 +1,11 @@
 package daos
 
 import (
+	"errors"
+
 	"bz.service.cloud.monitoring/common/db"
 	"bz.service.cloud.monitoring/server/internal/v1/models"
 	"bz.service.cloud.monitoring/server/internal/v1/params"
-	"errors"
 )
 
 // GetAdminInfoByUsername

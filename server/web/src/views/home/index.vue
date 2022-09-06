@@ -49,7 +49,7 @@
                             
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item @click="updatapwd()">修改密码</el-dropdown-item>
+                                    <!-- <el-dropdown-item @click="updatapwd()">修改密码</el-dropdown-item> -->
                                     <el-dropdown-item @click="loginOut()">退出</el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>

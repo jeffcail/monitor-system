@@ -146,7 +146,7 @@ const upgradeForm = ref({
 
 
 // 升级服务
-const upgradeApp = () => {
+const upgradeApp = async () => {
     let request = {
         serve_ip: upgradeForm.value.serve_ip,
         package_name: upgradeForm.value.package_name,
@@ -154,7 +154,13 @@ const upgradeApp = () => {
     }
     // console.log(request);
 
-    let res = upgradeServe(request)
+    let res = await upgradeServe(request)
+    if (res) {
+        if (res.code === 2000) {
+            ElMessage.success(res.msg)
+            upgradeDisable.value = false
+        }
+    }
     requestServeList()
 }
 
@@ -180,7 +186,6 @@ const submitForm = () => {
             let res = await createServe(request)
             if (res.code === 2000) {
                 ElMessage.success("添加成功")
-                router.push("/monitor/serve/list")
                 requestServeList()
             }
         } else {
@@ -216,7 +221,7 @@ const serve1 = ref();
 const requestServeList = async () => {
 
     clearTimeout(serve1.value)
-    serve1.value = setTimeout(()=>requestServeList(),100000000)
+    serve1.value = setTimeout(()=>requestServeList(),20000)
 
     let request = {
         page: formJsonIn.value.page,

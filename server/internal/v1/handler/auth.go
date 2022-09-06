@@ -23,7 +23,7 @@ func Login(c echo.Context) error {
 	}
 	res, err := service.AdminLogin(params, c.Request().URL.Path, c.Request().Method)
 	if err != nil {
-		return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, cast.ToString(err), ""))
+		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, cast.ToString(err), ""))
 	}
 
 	type loginResult struct {

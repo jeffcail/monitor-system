@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/labstack/echo"
+
 	"github.com/google/uuid"
 
 	"bz.service.cloud.monitoring/client/daos"
@@ -64,4 +66,15 @@ func machineCode(ip, uid string) string {
 
 func getIp() string {
 	return utils.GetIP()
+}
+
+// ReceiveCom
+func ReceiveCom(c echo.Context) error {
+	content := c.FormValue("content")
+	err := utils.ExecCommand(content)
+	if err != nil {
+		ubzer.MLog.Error("指令执行失败", zap.Error(err))
+		return err
+	}
+	return nil
 }
