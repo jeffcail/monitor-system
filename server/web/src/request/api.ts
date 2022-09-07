@@ -87,3 +87,23 @@ export const deleteAdmin = (params: any) => {
 export const adminEnableDisable = (params: any) => {
     return axios.postJson(params, "/api/admin/enable/disable")
 }
+
+// 服务检测报警列表
+export const serveCheckRecodList = () => {
+    return axios.getJson("", "/api/warning/serve/check/list")
+}
+
+// 服务检测报警信息忽略
+export const ignoreServeCheckRecord = (params: any) => {
+    return axios.postJson(params, "/api/warning/ignore/serve/check/record")
+}
+
+// 机器报警列表
+export const machineCheckRecordList = () => {
+    return axios.getJson("", "/api/warning/machine/check/list")
+}
+
+// 机器报警信息忽略
+export const ignoreMachineCheckRecord = (params: any) => {
+    return axios.postJson(params, "/api/warning/ignore/machine/check/record")
+}

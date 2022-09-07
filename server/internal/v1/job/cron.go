@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"bz.service.cloud.monitoring/server/internal/v1/models"
+
 	"bz.service.cloud.monitoring/common/request"
 
 	"go.uber.org/zap"
@@ -29,6 +31,16 @@ func checkServeList() {
 		}
 		if string(res) != "pong" {
 			serveState = 2
+			scr := &models.MonServeCheckRecord{
+				ServeId:       v.Id,
+				ServeName:     v.ServeName,
+				ServeAddress:  v.ServeAddress,
+				LastCheckTime: v.LastCheckTime,
+			}
+			err := daos.CreateCheckServeRecord(scr)
+			if err != nil {
+				ubzer.MLog.Error(fmt.Sprintf("检测服务 %v : 服务地址: %v 异常记录到异常记录表失败", v.ServeName, v.ServeAddress))
+			}
 		} else {
 			serveState = 1
 		}

@@ -87,6 +87,26 @@
     .el-breadcrumb{
         margin-left: 20px;
     }
+    .toolbar-static{
+        display: flex;
+
+        .static{
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+
+            .jcbj{
+                display: flex;
+                align-items: center;
+
+                p{
+                    padding-top: 4px;
+                    color: red;
+                }
+            }
+        }
+    }
+    
     .toolbar-select{
         display: flex;
         justify-content: center;

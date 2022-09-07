@@ -103,6 +103,20 @@ func RunServer() {
 		//machine.GET("/ssh", handler.RunWebSSH)
 		//machine.POST("/delete", handler.DeleteMachine)
 	}
+
+	// 报警信息
+	wn := e.Group("/api/warning")
+	wn.Use(middle.AuthCheck())
+	{
+		// 检测报警
+		wn.GET("/serve/check/list", handler.ServeCheckRecordList)
+		wn.POST("/ignore/serve/check/record", handler.IgnoreServeCheckRecord)
+
+		// 风险报警
+		wn.GET("/machine/check/list", handler.MachineCheckList)
+		wn.POST("/ignore/machine/check/record", handler.IgnoreMachineCheckRecord)
+	}
+
 	e.GET("/ssh", handler.RunWebSSH)
 
 	e.Logger.Fatal(e.Start(config.Config().HTTPBind))

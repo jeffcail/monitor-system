@@ -5,6 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"bz.service.cloud.monitoring/server/internal/v1/daos"
+
+	"github.com/spf13/cast"
+
 	_const "bz.service.cloud.monitoring/common/const"
 	"bz.service.cloud.monitoring/common/utils"
 
@@ -33,6 +37,13 @@ func ClientCpuPercent(c echo.Context) error {
 	res := &utils.Result{}
 	_ = json.Unmarshal(bytes, res)
 	if res.Code == 2000 {
+
+		if utils.LessThenAndEqual("60", cast.ToString(res.Data)) {
+			err := daos.CreateMachineCheckRecord(params.Ip, "cpu", cast.ToInt(res.Data))
+			if err != nil {
+				ubzer.MLog.Error(fmt.Sprintf("记录服务器报警信息失败"))
+			}
+		}
 		return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "成功", res.Data))
 	}
 	return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "失败", ""))
@@ -54,6 +65,14 @@ func ClientMemPercent(c echo.Context) error {
 	res := &utils.Result{}
 	_ = json.Unmarshal(bytes, res)
 	if res.Code == 2000 {
+
+		if utils.LessThenAndEqual("60", cast.ToString(res.Data)) {
+			err := daos.CreateMachineCheckRecord(params.Ip, "mem", cast.ToInt(res.Data))
+			if err != nil {
+				ubzer.MLog.Error(fmt.Sprintf("记录服务器报警信息失败"))
+			}
+		}
+
 		return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "成功", res.Data))
 	}
 	return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "失败", ""))
@@ -75,6 +94,14 @@ func ClientDiskPercent(c echo.Context) error {
 	res := &utils.Result{}
 	_ = json.Unmarshal(bytes, res)
 	if res.Code == 2000 {
+
+		if utils.LessThenAndEqual("60", cast.ToString(res.Data)) {
+			err := daos.CreateMachineCheckRecord(params.Ip, "cpu", cast.ToInt(res.Data))
+			if err != nil {
+				ubzer.MLog.Error(fmt.Sprintf("记录服务器报警信息失败"))
+			}
+		}
+
 		return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "成功", res.Data))
 	}
 	return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "失败", ""))
