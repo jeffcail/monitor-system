@@ -27,6 +27,7 @@ func RunServer() {
 	e.Static("/monitor/machine/list", "dist")
 	e.Static("/monitor/machine/dial", "dist")
 	e.Static("/monitor/login", "dist")
+	e.Static("/monitor/log/list", "dist")
 
 	e.Use(middleware.CORSWithConfig(
 		middleware.CORSConfig{
@@ -68,11 +69,11 @@ func RunServer() {
 
 	}
 	//查看日志
-	logger := e.Group("/api/log")
-	logger.Use(middle.AuthCheck())
+	l := e.Group("/api/log")
+	l.Use(middle.AuthCheck())
 	{
 		//查看日志信息列表
-		logger.POST("/query", handler.LogQuery)
+		l.POST("/query", handler.LogQuery)
 	}
 
 	// 菜单路由组

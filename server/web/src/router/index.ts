@@ -51,6 +51,12 @@ const routes: Array<RouteRecordRaw> = [
         path: "/monitor/machine/dial",
         name: "/monitor/machine/dial",
         component: () => import("@/views/machine/dial.vue"),
+      },
+      // 操作日志
+      {
+        path: "/monitor/log/list",
+        name: "/monitor/log/list",
+        component: () => import("@/views/log/log.vue"),
       }
     ]
   },

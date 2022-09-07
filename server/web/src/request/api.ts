@@ -107,3 +107,8 @@ export const machineCheckRecordList = () => {
 export const ignoreMachineCheckRecord = (params: any) => {
     return axios.postJson(params, "/api/warning/ignore/machine/check/record")
 }
+
+// 操作日志
+export const operateLogList = (params: any) => {
+    return axios.postJson(params, "/api/log/query")
+}
