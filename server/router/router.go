@@ -58,6 +58,14 @@ func RunServer() {
 		admin.POST("/enable/disable", handler.EnableDisableAdmin)
 
 	}
+	//查看日志
+	logger := e.Group("/api/log")
+	logger.Use(middle.AuthCheck())
+	{
+		//查看日志信息列表
+		logger.POST("/query", handler.LogQuery)
+	}
+
 	// 菜单路由组
 	menu := e.Group("/api/menus")
 	menu.Use(middle.AuthCheck())
