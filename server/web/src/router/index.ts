@@ -5,7 +5,7 @@ import Index from '@/views/home/index.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/monitor',
+    path: '/',
     name: '/monitor/index',
     component: Index,
     redirect: '/monitor/board',

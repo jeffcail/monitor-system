@@ -188,13 +188,11 @@ import { ElMessage } from 'element-plus';
 const router = useRouter()
 
 // 状态修改
-const changeState = (row) => {
-  let res =  adminEnableDisable({
+const changeState = async (row) => {
+  let res = await adminEnableDisable({
     id: row.id,
     state: row.state
   })
-  
-  console.log(res);
   if (res) {
     if (res.code == "2000") {
       ElMessage.success(res.msg)
@@ -209,11 +207,16 @@ const handleDelete = (row) => {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
-    }).then(()=>{
-        let res = deleteAdmin({
+    }).then(async ()=>{
+        let res = await deleteAdmin({
             id: row.id
         })
-        admin_list()
+        if (res) {
+            if (res.code == "2000") {
+                ElMessage.success(res.msg)
+                admin_list()
+            }
+        }
     }).catch(()=>{
         ElMessage.warning('取消删除')
     })
@@ -241,7 +244,7 @@ const update_admin = (row) => {
     updateAdminForm.value.office_post = row.office_post
 }
 
-const submitUpdateForm = () => {
+const submitUpdateForm = async () => {
     let request = {
         id: updateAdminForm.value.id,
         username: updateAdminForm.value.username,
@@ -251,10 +254,10 @@ const submitUpdateForm = () => {
         department: updateAdminForm.value.department,
         office_post: updateAdminForm.value.office_post,
     }
-    let res = updateAdmin(request)
+    let res = await updateAdmin(request)
     if (res.code === 2000) {
         ElMessage.success("修改成功")
-        router.push("/monitor/serve/list")
+        updateAdminDisable.value = false
         admin_list()
     }
 }
@@ -283,7 +286,7 @@ const addAdminForm = ref({
 
 const ruleFormRef = ref(null)
 
-const submitForm = () => {
+const submitForm = async () => {
     let request = {
         username: addAdminForm.value.username,
         real_name: addAdminForm.value.real_name,
@@ -292,10 +295,10 @@ const submitForm = () => {
         department: addAdminForm.value.department,
         office_post: addAdminForm.value.office_post,
     }
-    let res = addAdmin(request)
+    let res = await addAdmin(request)
     if (res.code === 2000) {
         ElMessage.success("添加成功")
-        router.push("/monitor/serve/list")
+        addAdminDisable.value = false
         admin_list()
     }
 }
@@ -342,7 +345,7 @@ const handleCurrentChange = (row) => {
         margin-left: 40px;
     }
     .add-admin {
-        margin-left: -1500px;
+        margin-left: -90%;
         margin-bottom: 20px;
     }
 

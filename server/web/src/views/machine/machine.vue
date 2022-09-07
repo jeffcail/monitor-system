@@ -44,19 +44,18 @@
             </el-table-column>
 
             <el-table-column label="操作" v-slot="{ row }">
-                    <!-- <el-button
+                    <el-button
                     size="big"
                     type="success"
-                    @click="handleDelete(row)"
-                    ><el-icon><Monitor /></el-icon></el-button
-                    > -->
+                    @click="sendCommond(row)"
+                    >发送指令</el-button>
 
-                    <el-button
+                    <!-- <el-button
                     size="big"
                     type="success"
                     @click="showConsole(row)"
                     ><el-icon><Monitor /></el-icon></el-button
-                    >
+                    > -->
             </el-table-column>
         </el-table>
 
@@ -76,6 +75,23 @@
             />
         </div>
     </div>
+
+        <el-dialog v-model="sendCommondDisable" title="发送指令" width="30%" draggable>
+        
+            <el-form :model="sendCommondForm">
+                <el-form-item>
+                    指令 &nbsp;&nbsp; <el-input v-model="sendCommondForm.content" autocomplete="off" placeholder="指令为linux命令 如: ls && mkdir && cd /root/xxx/stat.sh" style="width: 400px" />
+                </el-form-item>
+            </el-form>
+
+            <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="sendCommondDisable = false">取消</el-button>
+                <el-button type="primary" @click="sendCommondSubmit">发送</el-button>
+            </span>
+            </template>
+        </el-dialog>
+
 
     <!-- <el-dialog v-model="dialSshVisiable" title="Tips" width="30%" draggable>
         
@@ -105,9 +121,9 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router';
-import { machineList} from '@/request/api'
+import { machineList, sendMachineCommond } from '@/request/api'
 import { ElMessage } from 'element-plus';
 
 let terminalBox = ref(null)
@@ -120,6 +136,35 @@ const disabled = ref(false);
 const background = ref(false)
 
 const router = useRouter();
+
+
+// 发送指令
+const sendCommondDisable = ref(false)
+
+const sendCommondForm = ref({
+    content: "",
+    ip: ""
+});
+
+const sendCommond = (row) => {
+    sendCommondDisable.value = true
+    sendCommondForm.value.ip = row.ip
+}
+
+const sendCommondSubmit = async () => {
+    let request  = {
+        ip: sendCommondForm.value.ip,
+        content: sendCommondForm.value.content,
+    }
+    let res = await sendMachineCommond(request)
+    console.log(res);
+    if (res.code === 2000) {
+        ElMessage.success("指令发送成功")
+        sendCommondDisable.value = false
+        machine_list()
+    }
+}
+
 
 const showConsole = (row) => {
     sessionStorage.setItem(`url`, `/monitor/machine/dial`)
