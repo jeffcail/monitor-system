@@ -11,6 +11,7 @@ type ClientGlobalConfig struct {
 	Redis            driver.RedisConfig
 	Mysql            driver.MysqlConfig
 	ClientLoggerPath string
+	GoFileServe      string
 }
 
 var config ClientGlobalConfig

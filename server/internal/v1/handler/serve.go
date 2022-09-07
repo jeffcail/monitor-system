@@ -85,20 +85,24 @@ func UpgradeServe(c echo.Context) error {
 	p["package_name"] = param.PackageName
 	p["package_path"] = param.PackagePath
 	res, err := request.GetParams("http://"+param.ServeIp+":9093/c/serve/upgrade", header, p)
+	ubzer.MLog.Info(fmt.Sprintf("升级=========== res: %v", string(res)))
 	if err != nil {
-		ubzer.MLog.Error(fmt.Sprintf("升级服务失败 ServeAddress: %v", param.ServeIp), zap.Error(err))
-		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "升级服务失败", ""))
+		ubzer.MLog.Error(fmt.Sprintf("升级服务请求失败 ServeAddress: %v", param.ServeIp), zap.Error(err))
+		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "升级服务请求失败", ""))
 	}
-	if string(res) != "success" {
-		ubzer.MLog.Error(fmt.Sprintf("升级服务失败 ServeAddress: %v", param.ServeIp), zap.Error(err))
-		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "升级服务失败", ""))
+	type FRes struct {
+		str string
 	}
+
+	//if f.str != "success" {
+	//	ubzer.MLog.Error(fmt.Sprintf("升级服务失败 ServeAddress: %v", param.ServeIp), zap.Error(err))
+	//	return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, string(res), ""))
+	//}
 	admin := GetAdminInfoFromParseToken(c)
 	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, c.Request().URL.Path, c.Request().Method,
 		fmt.Sprintf("%v 在 %v 时间升级了服务地址为 %v 的服务", admin.Username, time.Now(), param.ServeIp))
 	if err != nil {
 		ubzer.MLog.Error("记录操作日志失败", zap.Error(err))
 	}
-
-	return nil
+	return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, string(res), ""))
 }

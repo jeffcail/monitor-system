@@ -72,7 +72,8 @@ onMounted(() => {
 })
 
 const go_out = () => {
-    window.history.go(-1);
+    socket.close()
+
 }
 
 
@@ -86,7 +87,7 @@ const go_out = () => {
     margin-left: 60px;
 }
 .go_out {
-    margin-left: 40px;
+    margin-left: -89%;
     margin-top: 20px;
     margin-bottom: 20px;
 }
