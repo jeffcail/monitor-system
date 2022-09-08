@@ -25,14 +25,19 @@
                 </div>
             </template>
             </el-table-column>
-<!-- 
+
             <el-table-column label="备注" width="280">
-            <template #default="scope">
-                <div style="display: flex; align-items: center">
-                <span style="margin-left: 10px">{{ scope.row.remark }}</span>
-                </div>
-            </template>
-            </el-table-column> -->
+                <template  #default="scope">
+                    <el-input
+                    v-model="remark"
+                    class="w-50 m-2"
+                    size="large"
+                    placeholder="请输入备注"
+                    @click="addMachineRemark(row)"
+                    />
+                </template>
+                
+            </el-table-column>
 
             <el-table-column label="创建时间" width="280">
             <template #default="scope">
@@ -129,6 +134,13 @@ import { ElMessage } from 'element-plus';
 let terminalBox = ref(null)
 let term
 let socket
+
+// 备注
+const remark = ref("");
+
+const addMachineRemark = (row) => {
+    console.log(row);
+}
 
 
 const small = ref(false);
