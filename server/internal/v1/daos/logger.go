@@ -23,7 +23,7 @@ func LogQuery(params *params.LogQueryParam, filterLogQuery map[string]interface{
 		query.Where("updated_at <=?", params.StopTime)
 		query2.Where("updated_at <= ?", params.StopTime)
 	}
-	count, err := query.FindAndCount(&list)
 	query.Desc("updated_at")
+	count, err := query.FindAndCount(&list)
 	return count, list, err
 }

@@ -54,11 +54,8 @@ func SelAdmin(params *params.SelAdminParam, filter map[string]interface{}) (int6
 		query.Where(k+" = ? ", v)
 		query2.Where(k+" = ? ", v)
 	}
-
-	count, err := query.FindAndCount(&list)
-	//count, _ := query2.Count()
 	query.Desc("id")
-	//err := query.Find(&list)
+	count, err := query.FindAndCount(&list)
 	return count, list, err
 }
 
