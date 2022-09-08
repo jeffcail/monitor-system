@@ -37,6 +37,11 @@ export const machineList = (params: any) => {
     return axios.postJson(params, "/api/machine/list")
 }
 
+// 修改机器备注
+export const updateMachineRemark = (params: any) => {
+    return axios.postJson(params, "/api/machine/update/remark")
+}
+
 // 发送指令
 export const sendMachineCommond = (params: any) => {
     return axios.postJson(params, "/api/machine/send/com")

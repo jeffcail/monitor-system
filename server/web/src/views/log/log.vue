@@ -6,7 +6,7 @@
     <div class="admin-list">
         <el-table :data="tableData" style="width: 100%">
            
-           <el-table-column label="ID" width="60">
+           <el-table-column label="ID" width="140">
            <template #default="scope">
                <div style="display: flex; align-items: center">
                <span style="margin-left: 10px">{{ scope.row.id }}</span>
@@ -14,7 +14,7 @@
            </template>
            </el-table-column>
 
-           <el-table-column label="用户名" width="80">
+           <el-table-column label="用户名" width="120">
            <template #default="scope">
                <div style="display: flex; align-items: center">
                <span style="margin-left: 10px">{{ scope.row.admin_username }}</span>
@@ -22,13 +22,13 @@
            </template>
            </el-table-column>
 
-           <el-table-column label="路径" width="180">
+           <!-- <el-table-column label="路径" width="180">
            <template #default="scope">
                <div style="display: flex; align-items: center">
                <span style="margin-left: 10px">{{ scope.row.url }}</span>
                </div>
            </template>
-           </el-table-column>
+           </el-table-column> -->
 
            <el-table-column label="日志" width="680">
            <template #default="scope">

@@ -2,7 +2,7 @@
     <div class="machine-list">
         <el-table :data="tableData" style="width: 100%">
            
-            <el-table-column label="机器码" width="280">
+            <el-table-column label="机器码" width="290">
             <template #default="scope">
                 <div style="display: flex; align-items: center">
                 <span style="margin-left: 10px">{{ scope.row.machine_code }}</span>
@@ -29,11 +29,11 @@
             <el-table-column label="备注" width="280">
                 <template  #default="scope">
                     <el-input
-                    v-model="remark"
+                    v-model="scope.row.remark"
                     class="w-50 m-2"
                     size="large"
                     placeholder="请输入备注"
-                    @click="addMachineRemark(row)"
+                    @blur="addMachineRemark(scope.row)"
                     />
                 </template>
                 
@@ -126,9 +126,9 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router';
-import { machineList, sendMachineCommond } from '@/request/api'
+import { machineList, sendMachineCommond, updateMachineRemark } from '@/request/api'
 import { ElMessage } from 'element-plus';
 
 let terminalBox = ref(null)
@@ -136,10 +136,19 @@ let term
 let socket
 
 // 备注
-const remark = ref("");
-
-const addMachineRemark = (row) => {
-    console.log(row);
+const addMachineRemark = async (row) => {
+    let request = {
+        machine_code: row.machine_code,
+        ip: row.ip,
+        remark: row.remark,
+    }
+    
+    let res = await updateMachineRemark(request)
+    console.log(res);
+    if (res.code === 2000) {
+        ElMessage.success(res.msg)
+        machine_list()
+    }
 }
 
 

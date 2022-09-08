@@ -28,7 +28,7 @@ func MachineList(c echo.Context) error {
 		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, msg, ""))
 	}
 
-	count, list, err := service.MachineList(params)
+	count, list, err := service.MachineList(params, GetAdminInfoFromParseToken(c), c.Request().URL.Path, c.Request().Method)
 	if err != nil {
 		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "获取机器列表失败", ""))
 	}
@@ -64,6 +64,21 @@ func SendCom(c echo.Context) error {
 		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, cast.ToString(bytes), ""))
 	}
 	return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "指令发送成功", ""))
+}
+
+// UpdateMachineRemark
+func UpdateMachineRemark(c echo.Context) error {
+	param := &params.UpdateMachineRemarkParams{}
+	_ = c.Bind(param)
+	msg := utils.ValidateParam(param)
+	if msg != "" {
+		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, msg, ""))
+	}
+	err := service.UpdateMachineRemark(param, GetAdminInfoFromParseToken(c), c.Request().URL.Path, c.Request().Method)
+	if err != nil {
+		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, cast.ToString(err), ""))
+	}
+	return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "修改成功", ""))
 }
 
 //// DeleteMachine

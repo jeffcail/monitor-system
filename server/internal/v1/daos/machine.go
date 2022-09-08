@@ -1,6 +1,8 @@
 package daos
 
 import (
+	"errors"
+
 	"bz.service.cloud.monitoring/common/db"
 	"bz.service.cloud.monitoring/server/internal/v1/models"
 	params2 "bz.service.cloud.monitoring/server/internal/v1/params"
@@ -30,6 +32,27 @@ func AllMachine() ([]*models.MonMachine, error) {
 		return nil, err
 	}
 	return data, nil
+}
+
+// UpdateMachineRemark
+func UpdateMachineRemark(param *params2.UpdateMachineRemarkParams) error {
+	m := &models.MonMachine{}
+	has, err := db.Mysql.Where("machine_code = ?", param.MachineCode).Where("ip = ?", param.Ip).Get(m)
+	if err != nil {
+		return err
+	}
+	if !has {
+		return errors.New("机器不存在")
+	}
+	m.Remark = param.Remark
+	affected, err := db.Mysql.ID(m.Id).Update(m)
+	if err != nil {
+		return err
+	}
+	if affected != 1 {
+		return errors.New("修改备注失败")
+	}
+	return nil
 }
 
 //// DeleteMachine

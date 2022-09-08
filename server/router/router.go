@@ -109,6 +109,7 @@ func RunServer() {
 		machine.POST("/list", handler.MachineList)
 		machine.GET("/all", handler.AllMachine)
 		machine.POST("/send/com", handler.SendCom)
+		machine.POST("/update/remark", handler.UpdateMachineRemark)
 		//machine.GET("/ssh", handler.RunWebSSH)
 		//machine.POST("/delete", handler.DeleteMachine)
 	}

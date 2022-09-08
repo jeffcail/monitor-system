@@ -12,7 +12,7 @@ type MonMenus struct {
 	Method    string    `json:"method" xorm:"default '' comment('方法') VARCHAR(20)"`
 	CreatedAt time.Time `json:"created_at" xorm:"created not null comment('创建时间') TIMESTAMP"`
 	UpdatedAt time.Time `json:"updated_at" xorm:"updated not null comment('更新时间') TIMESTAMP"`
-	Version   int64     `json:"version" xorm:"not null comment('版本号') BIGINT version"`
+	Version   int64     `json:"version" xorm:"version not null comment('版本号') BIGINT version"`
 }
 
 func (mm *MonMenus) TableName() string {

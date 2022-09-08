@@ -16,3 +16,10 @@ type SendComParams struct {
 	Ip      string `json:"ip" validate:"required"`
 	Content string `json:"content" validate:"required"`
 }
+
+// UpdateMachineRemarkParams
+type UpdateMachineRemarkParams struct {
+	MachineCode string `json:"machine_code" validate:"required"`
+	Ip          string `json:"ip" validate:"required"`
+	Remark      string `json:"remark"`
+}
