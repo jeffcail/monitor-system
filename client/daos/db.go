@@ -7,6 +7,16 @@ import (
 	"bz.service.cloud.monitoring/common/db"
 )
 
+// GetMachineInfoFromDbByIp
+func GetMachineInfoFromDbByIp(ip string) (*models.MonMachine, error) {
+	m := &models.MonMachine{}
+	_, err := db.Mysql.Where("ip = ?", ip).Get(m)
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // SaveHostName
 func SaveHostName(hostname, machineCode, ip string) error {
 	machine := &models.MonMachine{

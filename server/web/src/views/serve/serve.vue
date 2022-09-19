@@ -69,12 +69,12 @@
                     @click="handleDelete(row)"
                     >删除</el-button
                     >
-                    <el-button
+                    <!-- <el-button
                     size="small"
                     type="primary"
-                    @click="upgradeDisable= true"
+                    @click="upgradeServeView(row)"
                     >升级</el-button
-                    >
+                    > -->
             </el-table-column>
         </el-table>
 
@@ -95,29 +95,71 @@
         </div>
 
 
-        <el-dialog v-model="upgradeDisable" title="升级服务" width="30%" draggable>
-    
+        <el-dialog v-model="upgradeDisable" title="升级服务" width="40%" draggable>
             <el-form :model="upgradeForm">
+                <el-upload
+                    class="upload-demo"
+                    drag
+                    multiple
+                    :http-request="httpRequest"
+                    :limit="1"
+                >
+                    <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                    <div class="el-upload__text">
+                    拖到此区域上传 或者 <em>点击上传</em>
+                    </div>
+                    <template #tip>
+                    <div class="el-upload__tip" style="color: red;" align="left">
+                        <span>友情提示:</span> <br/>
+                        <span>1. 包名必须与当前服务里start.sh 脚本中构建的名称保持一致</span> <br/>
+                        <span>2. 包名不能带后缀</span> <br/>
+                        <span>3. 包文件大小不能超过100M</span> <br/>
+                        <span>4. 版本号不得重复</span> <br/>
+                        <span>5. 当前版本号不得小于上次升级版本号</span>
+                    </div>
+                    </template>
+                </el-upload>
 
                 <el-form-item>
-                    服务地址: <el-input v-model="upgradeForm.serve_ip" placeholder="127.0.0.1" autocomplete="off" style="width: 200px" />
-                </el-form-item>                
-
-                <el-form-item>
-                    服务包名: <el-input v-model="upgradeForm.package_name" autocomplete="off" style="width: 200px" />
-                </el-form-item>
-
-                <el-form-item>
-                    服务路径: <el-input v-model="upgradeForm.package_path" autocomplete="off" style="width: 200px" />
+                    输入版本号: &nbsp; &nbsp; <el-input v-model="upgradeForm.upgrade_version" autocomplete="off" style="width: 200px" />
                 </el-form-item>
             </el-form>
 
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="upgradeDisable = false">取消升级</el-button>
-                <el-button type="primary" @click="upgradeApp">开始升级</el-button>
-            </span>
-            </template>
+         
+                <div style="margin-left: -400px;">
+                    <el-button @click="upgradeDisable = false">取消</el-button>
+                    <el-button type="primary" @click="upgradeApp(2)">上传</el-button>  
+                </div>
+
+
+
+                <div style="marigin-top: 10px; margin-bottom: 10px;" align="left">
+                    记录
+                </div>
+                <el-table :data="upgradeRecordTable" style="width: 100%">
+                    <el-table-column prop="created_at" label="升级时间" width="200" />
+                    <el-table-column prop="serve_name" label="服务名称" width="200" />
+                    <el-table-column prop="pack_name" label="包名" width="200" />
+                    <el-table-column prop="upgrade_version" label="版本号" />
+                </el-table>
+       
+
+                <div class="demo-pagination-block">
+                    <el-pagination
+                    v-model:currentPage="upgradeRecordForm.page"
+                    v-model:page-size="upgradeRecordForm.page_size"
+                    :page-sizes="[10, 20, 30, 40, 50]"
+                    :small="small"
+                    :disabled="disabled"
+                    :background="background"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="upgradeTotal"
+                    :current-page="upgradeRecordForm.page"
+                    @size-change="handleSizeUpgradeChange"
+                    @current-change="handleUpgradeCurrentChange"
+                    />
+                </div>
+
         </el-dialog>
 
 
@@ -128,7 +170,7 @@
 <script setup>
 import { ref, reactive, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router';
-import { serveList, deleteServe, createServe, upgradeServe } from '@/request/api'
+import { serveList, deleteServe, createServe, upgradeServe, upgradeServeRecord } from '@/request/api'
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 const small = ref(false);
@@ -137,32 +179,96 @@ const background = ref(false)
 
 const router = useRouter();
 
+// 升级服务 - 上传包文件
 const upgradeDisable = ref(false);
+
+const upgradeServeView = (row) => {
+    upgradeDisable.value = true
+    upgradeForm.value.serve_id = row.id
+    upgradeForm.value.serve_name = row.serve_name
+    upgradeForm.value.serve_address = row.serve_address
+    upgradeForm.value.serve_state = row.serve_state
+    upgradeRecordForm.value.serve_address = row.serve_address
+    upgradeRecord()
+}
+
 const upgradeForm = ref({
-    package_name: "",
-    package_path : "",
-    serve_ip: "",
+    go_file: "",
+    upgrade_version: "",
+    serve_id: 0,
+    serve_name: "",
+    serve_address: "",
+    serve_state: 0,
 });
 
+const httpRequest = (param) => {
+    let fileObj = param.file // 相当于input里取得的files
+    upgradeForm.value.go_file = fileObj
+    upgradeApp(1)
+}
 
 // 升级服务
-const upgradeApp = async () => {
-    let request = {
-        serve_ip: upgradeForm.value.serve_ip,
-        package_name: upgradeForm.value.package_name,
-        package_path: upgradeForm.value.package_path,
-    }
-    // console.log(request);
+const upgradeApp = async (t) => {
+    if (t === 1) {
+        
+    } else {
+        let fd = new FormData()// FormData 对象
+        fd.append('go_file',upgradeForm.value.go_file)
+        fd.append('upgrade_version',upgradeForm.value.upgrade_version)
+        fd.append('serve_id',upgradeForm.value.serve_id)
+        fd.append('serve_name',upgradeForm.value.serve_name)
+        fd.append('serve_address',upgradeForm.value.serve_address)
+        fd.append('serve_state',upgradeForm.value.serve_state)
 
-    let res = await upgradeServe(request)
-    if (res) {
-        if (res.code === 2000) {
-            ElMessage.success(res.msg)
-            upgradeDisable.value = false
+        let res = await upgradeServe(fd)
+        if (res) {
+            if (res.code === 2000) {
+                ElMessage.success(res.msg)
+                upgradeDisable.value = false
+            }
         }
+        // requestServeList()
     }
-    requestServeList()
+  
 }
+
+// 升级服务记录
+const upgradeRecordTable = ref([]);
+const upgradeTotal = ref(0);
+
+const upgradeRecordForm = ref({
+    page: 1,
+    page_size: 10,
+    serve_address: ""
+})
+
+const upgradeRecord = async () => {
+    let request  = {
+        page: upgradeRecordForm.value.page,
+        page_size: upgradeRecordForm.value.page_size,
+        serve_address: upgradeRecordForm.value.serve_address,
+    }
+
+    let res = await upgradeServeRecord(request)
+    if (res.code !== 2000) {
+        res.data = []
+    }
+    upgradeRecordTable.value = res.data.list
+    upgradeTotal.value = res.data.total
+}
+
+const handleSizeUpgradeChange = (row) => {
+    upgradeRecordForm.value.page_size = row
+    upgradeRecordForm.value.page = 1
+    upgradeRecord()
+}
+
+const handleUpgradeCurrentChange = (row) => {
+    upgradeRecordForm.value.page = row
+    upgradeRecord();
+} 
+
+
 
 const ruleForm = ref({
     serve_address: "",

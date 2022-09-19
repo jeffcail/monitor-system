@@ -51,6 +51,7 @@ func RunServer() {
 
 	// 登陆
 	e.POST("/api/login", handler.Login)
+	e.GET("/api/dl", handler.Download)
 
 	//管理员增删改查
 	admin := e.Group("/api/admin")
@@ -100,6 +101,7 @@ func RunServer() {
 		serve.POST("/delete", handler.DeleteServe)
 		serve.POST("/list", handler.ServeList)
 		serve.POST("/upgrade", handler.UpgradeServe)
+		serve.POST("/upgrade/record", handler.UpgradeRecord)
 	}
 
 	// 机器路由组
@@ -110,6 +112,8 @@ func RunServer() {
 		machine.GET("/all", handler.AllMachine)
 		machine.POST("/send/com", handler.SendCom)
 		machine.POST("/update/remark", handler.UpdateMachineRemark)
+		machine.POST("/upgrade", handler.UpgradeClientMachine)
+		machine.POST("/upgrade/record", handler.UpgradeClientMachineRecord)
 		//machine.GET("/ssh", handler.RunWebSSH)
 		//machine.POST("/delete", handler.DeleteMachine)
 	}

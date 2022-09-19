@@ -47,11 +47,11 @@ func MachineList(params *params2.MachineListParams, admin *models.MonAdmin, url 
 		data = append(data, mlr)
 	}
 
-	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf(""+
-		"%v 在 %v 查看了机器列表", admin.Username, time.Now().Format(_const.Layout)))
-	if err != nil {
-		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 查看了机器列表数据，记录此操作失败", admin.Username, time.Now().Format(_const.Layout)))
-	}
+	//err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf(""+
+	//	"%v 在 %v 查看了机器列表", admin.Username, time.Now().Format(_const.Layout)))
+	//if err != nil {
+	//	ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 查看了机器列表数据，记录此操作失败", admin.Username, time.Now().Format(_const.Layout)))
+	//}
 
 	return count, data, nil
 }
@@ -104,6 +104,79 @@ func UpdateMachineRemark(param *params2.UpdateMachineRemarkParams, admin *models
 			param.MachineCode), zap.Error(err))
 	}
 	return nil
+}
+
+// UpgradeClientServe
+func UpgradeClientServe(param *params2.UpgradeClientMachineParams, packageName string, md5Sum string, admin *models.MonAdmin, url string, method string) error {
+	t := time.Now().Format(_const.Layout)
+	err := daos.AddUpgradeClientServeRecord(param, packageName, md5Sum)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 升级了机器为: %v 的服务 上传的包名: %v", admin.Username, t, param.MachineIp,
+			packageName))
+		return err
+	}
+	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf("%v 在 %v 升级了"+
+		"机器为: %v 的服务 上传的包名: %v", admin.Username, t, param.MachineIp,
+		packageName))
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 升级了机器为: %v 的服务 上传的包名: %v 记录此日志失败", admin.Username, t,
+			param.MachineIp, packageName))
+	}
+	return nil
+}
+
+// CheckClientUpgradeVersion
+func CheckClientUpgradeVersion(machineIp string, upgradeVersion string) error {
+	m, err := daos.CheckClientUpgradeVersion(machineIp)
+	if err != nil {
+		return err
+	}
+
+	if m != nil {
+		if m.UpgradeVersion == upgradeVersion {
+			return errors.New("版本重复")
+		}
+		if m.UpgradeVersion > upgradeVersion {
+			return errors.New("当前版本号不得小于历史版本号")
+		}
+	}
+	return nil
+}
+
+type UpgradeClientRecordList struct {
+	Id              int64  `json:"id"`
+	MachineCode     string `json:"machine_code"`
+	MachineIp       string `json:"machine_ip"`
+	MachineHostname string `json:"machine_hostname"`
+	MachineRemark   string `json:"machine_remark"`
+	PackageName     string `json:"package_name"`
+	UpgradeVersion  string `json:"upgrade_version"`
+	CreatedAt       string `json:"created_at"`
+}
+
+// UpgradeClientMachineRecord
+func UpgradeClientMachineRecord(param *params2.UpgradeClientMachineRecord) (int64, []*UpgradeClientRecordList, error) {
+	data := make([]*UpgradeClientRecordList, 0)
+	count, records, err := daos.UpgradeClientMachineRecord(param)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("查看客户端升级记录失败 服务地址: %v", param.MachineIp), zap.Error(err))
+		return 0, nil, errors.New("查看客户端升级记录失败")
+	}
+
+	for _, v := range records {
+		ucrl := &UpgradeClientRecordList{
+			Id:              v.Id,
+			MachineCode:     v.MachineCode,
+			MachineIp:       v.MachineIp,
+			MachineHostname: v.MachineHostname,
+			MachineRemark:   v.MachineRemark,
+			PackageName:     v.PackageName,
+			UpgradeVersion:  v.UpgradeVersion,
+			CreatedAt:       v.CreatedAt.Format(_const.Layout),
+		}
+		data = append(data, ucrl)
+	}
+	return count, data, err
 }
 
 //// DeleteMachine

@@ -28,7 +28,12 @@ export const deleteServe = (params: any) => {
 
 // 服务升级
 export const upgradeServe = (params: any) => {
-    return axios.postJson(params, "/api/serve/upgrade")
+    return axios.postJson2(params, "/api/serve/upgrade")
+}
+
+// 服务升级记录
+export const upgradeServeRecord = (params: any) => {
+    return axios.postJson(params, "/api/serve/upgrade/record")
 }
 
 // 机器
@@ -45,6 +50,16 @@ export const updateMachineRemark = (params: any) => {
 // 发送指令
 export const sendMachineCommond = (params: any) => {
     return axios.postJson(params, "/api/machine/send/com")
+}
+
+// 客户端升级
+export const upgradeClientServe = (params: any) => {
+    return axios.postJson2(params, "/api/machine/upgrade")
+}
+
+// 客户端升级记录
+export const upgradeClientRecord = (params: any) => {
+    return axios.postJson(params, "/api/machine/upgrade/record")
 }
 
 // 所有机器
