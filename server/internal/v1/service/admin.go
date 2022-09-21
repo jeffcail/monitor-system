@@ -131,6 +131,12 @@ func PasswordValidate(params *params.UpdAdminParamById) string {
 // UpdateAdminById
 func UpdAdminById(params *params.UpdAdminParamById, admin *models.MonAdmin, url string, method string) error {
 	t := time.Now().Format(_const.Layout)
+	if params.Password != "" && len(params.Password) >= 12 && len(params.Password) <= 6 {
+		return errors.New("password长度必须为6~12位")
+	}
+	if params.Phone != "" && len(params.Phone) != 11 {
+		return errors.New("phone长度必须为11位")
+	}
 	data, err := daos.GetAdminInfoById(params.Id)
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("%v 在 %v 变更Id:%v 管理员信息时获取数据失败", admin.Username, t, params.Id))

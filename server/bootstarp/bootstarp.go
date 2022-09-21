@@ -27,7 +27,6 @@ func init() {
 
 func InitBoot() {
 	parseRemoteConfig(*ip, *port, *cfg)
-	ubzer.InitLogger(config.Config().LoggerPath)
 	initLogger()
 	initMysql()
 	initRedis()
