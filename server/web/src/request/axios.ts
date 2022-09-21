@@ -107,4 +107,24 @@ export default {
             return checkCode(err);
         });
     },
+
+    postJson2<U>(data: any, url: string) {
+        let token: any = "Bearer "+window.localStorage.getItem("token")
+        return axios({
+            method: "POST",
+            url: url,
+            data: data,
+            headers: {
+                "Authorization": token,
+                "key": "2A3F43B2E46DDAFC6E12C2B386704EF4",
+                "secret": "7FE6461015477B0F24ADD487CBC4A398",
+                "sign": "dbbcbb3266ce08f5b8549bcf43bda750",
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((res: any) => {
+            return checkStatus(res);
+        }).catch((err) => {
+            return checkCode(err);
+        });
+    },
 }

@@ -79,12 +79,12 @@ func GetAllServe() ([]*models.MonServe, error) {
 
 // UpdateServeById
 func UpdateServeById(serve *models.MonServe) error {
-	affected, err := db.Mysql.ID(serve.Id).Update(serve)
+	_, err := db.Mysql.ID(serve.Id).Update(serve)
 	if err != nil {
 		return err
 	}
-	if affected != 1 {
-		return errors.New("修改serve 失败")
-	}
+	//if affected != 1 {
+	//	return errors.New("修改serve 失败")
+	//}
 	return nil
 }

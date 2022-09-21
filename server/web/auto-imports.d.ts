@@ -27,5 +27,6 @@ declare global {
   const ElTable: typeof import('element-plus/es')['ElTable']
   const ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
   const ElTag: typeof import('element-plus/es')['ElTag']
+  const ElUpload: typeof import('element-plus/es')['ElUpload']
 }
 export {}

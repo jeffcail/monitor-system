@@ -6,12 +6,15 @@ import (
 )
 
 type GlobalConfig struct {
-	Debug      bool
-	HTTPBind   string
-	Mysql      driver.MysqlConfig
-	Redis      driver.RedisConfig
-	LoggerPath string
-	Slat       string
+	Debug           bool
+	HTTPBind        string
+	ClientHttpBind  string
+	Mysql           driver.MysqlConfig
+	Redis           driver.RedisConfig
+	LoggerPath      string
+	Slat            string
+	UpPkgPath       string
+	UpClientPkgPath string
 }
 
 var config GlobalConfig

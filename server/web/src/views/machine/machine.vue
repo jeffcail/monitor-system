@@ -10,7 +10,7 @@
             </template>
             </el-table-column>
 
-            <el-table-column label="IP" width="280">
+            <el-table-column label="IP" width="180">
             <template #default="scope">
                 <div style="display: flex; align-items: center">
                 <span style="margin-left: 10px">{{ scope.row.ip }}</span>
@@ -50,10 +50,16 @@
 
             <el-table-column label="操作" v-slot="{ row }">
                     <el-button
-                    size="big"
+                    size="small"
                     type="success"
                     @click="sendCommond(row)"
                     >发送指令</el-button>
+
+                    <el-button
+                    size="small"
+                    type="success"
+                    @click="upgradeClientView(row)"
+                    >升级客户端</el-button>
 
                     <!-- <el-button
                     size="big"
@@ -97,6 +103,71 @@
             </template>
         </el-dialog>
 
+        <el-dialog v-model="upgradeClientDisable" title="升级客户端" width="40%" draggable>
+            <el-form :model="upgradeClientForm">
+                <el-upload
+                    class="upload-demo"
+                    drag
+                    multiple
+                    :http-request="httpRequest"
+                    :limit="1"
+                >
+                    <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                    <div class="el-upload__text">
+                    拖到此区域上传 或者 <em>点击上传</em>
+                    </div>
+                    <template #tip>
+                    <div class="el-upload__tip" style="color: red;" align="left">
+                        <span>友情提示:</span> <br/>
+                        <span>1. 包名不能带后缀</span> <br/>
+                        <span>2. 包文件大小不能超过100M</span> <br/>
+                        <span>3. 版本号不得重复</span> <br/>
+                        <span>4. 当前版本号不得小于上次升级版本号</span>
+                    </div>
+                    </template>
+                </el-upload>
+
+                <el-form-item>
+                    输入版本号: &nbsp; &nbsp; <el-input v-model="upgradeClientForm.upgrade_version" autocomplete="off" style="width: 200px" />
+                </el-form-item>
+            </el-form>
+
+         
+                <div style="margin-left: -400px;">
+                    <el-button @click="upgradeClientDisable = false">取消</el-button>
+                    <el-button type="primary" @click="upgradeClient(2)">上传</el-button>  
+                </div>
+
+
+
+                <div style="marigin-top: 10px; margin-bottom: 10px;" align="left">
+                    记录
+                </div>
+                <el-table :data="upgradeClientRecordTable" style="width: 100%">
+                    <el-table-column prop="created_at" label="升级时间" width="200" />
+                    <el-table-column prop="package_name" label="包名" width="200" />
+                    <el-table-column prop="upgrade_version" label="版本号" />
+                </el-table>
+       
+
+                <div class="demo-pagination-block">
+                    <el-pagination
+                    v-model:currentPage="upgradeClientRecordForm.page"
+                    v-model:page-size="upgradeClientRecordForm.page_size"
+                    :page-sizes="[10, 20, 30, 40, 50]"
+                    :small="small"
+                    :disabled="disabled"
+                    :background="background"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="upgradeClientTotal"
+                    :current-page="upgradeClientRecordForm.page"
+                    @size-change="handleSizeUpgradeClientChange"
+                    @current-change="handleUpgradeClientCurrentChange"
+                    />
+                </div>
+
+        </el-dialog>
+
 
     <!-- <el-dialog v-model="dialSshVisiable" title="Tips" width="30%" draggable>
         
@@ -128,12 +199,107 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
-import { machineList, sendMachineCommond, updateMachineRemark } from '@/request/api'
+import { machineList, sendMachineCommond, updateMachineRemark, upgradeClientServe, upgradeClientRecord } from '@/request/api'
 import { ElMessage } from 'element-plus';
 
 let terminalBox = ref(null)
 let term
 let socket
+
+// 升级客户端
+const upgradeClientDisable = ref(false);
+
+const upgradeClientView = (row) => {
+    upgradeClientDisable.value = true
+    upgradeClientForm.value.machine_code = row.machine_code
+    upgradeClientForm.value.machine_ip = row.ip
+    upgradeClientForm.value.machine_hostname = row.host_name
+    upgradeClientForm.value.machine_remark = row.remark
+
+    upgradeClientRecordForm.value.machine_ip = row.ip
+
+    upgradeClientRecords()
+}
+
+const upgradeClientForm = ref({
+    go_file: "",
+    machine_code: "",
+    machine_ip: "",
+    machine_hostname: "",
+    machine_remark: "",
+    upgrade_version: ""
+});
+
+const httpRequest = (param) => {
+    let fileObj = param.file // 相当于input里取得的files
+    upgradeClientForm.value.go_file = fileObj
+    upgradeClient(1)
+}
+
+const upgradeClient = async(t) => {
+    if (t === 1) {
+
+    } else {
+        let fd = new FormData()// FormData 对象
+        fd.append('go_file',upgradeClientForm.value.go_file)
+        fd.append('machine_code',upgradeClientForm.value.machine_code)
+        fd.append('machine_ip', upgradeClientForm.value.machine_ip)
+        fd.append('machine_hostname', upgradeClientForm.value.machine_hostname)
+        fd.append('machine_remark', upgradeClientForm.value.machine_remark)
+        fd.append('upgrade_version', upgradeClientForm.value.upgrade_version)
+
+        let res = await upgradeClientServe(fd)
+        if (res) {
+            if (res.code === 2000) {
+                ElMessage.success(res.msg)
+                upgradeClientDisable.value = false
+            }
+        }
+    }
+}
+
+
+// 查看客户端升级记录
+const upgradeClientRecordTable = ref([]);
+const upgradeClientTotal = ref(0);
+
+
+const upgradeClientRecordForm = ref({
+    page: 1,
+    page_size: 10,
+    machine_ip: ""
+})
+
+const upgradeClientRecords = async() => {
+    let request  = {
+        page: upgradeClientRecordForm.value.page,
+        page_size: upgradeClientRecordForm.value.page_size,
+        machine_ip: upgradeClientRecordForm.value.machine_ip,
+    }
+
+    let res = await upgradeClientRecord(request)
+    // console.log(res);
+    if (res.code !== 2000) {
+        res.data = []
+    }
+    upgradeClientRecordTable.value = res.data.list
+    upgradeClientTotal.value = res.data.total
+}
+
+
+const handleSizeUpgradeClientChange = () => {
+    upgradeClientRecordForm.value.page_size = row
+    upgradeClientRecordForm.value.page = 1
+    upgradeClientRecords()
+}
+
+const handleUpgradeClientCurrentChange = () => {
+    upgradeClientRecordForm.value.page = row
+    upgradeClientRecords();
+}
+
+
+
 
 // 备注
 const addMachineRemark = async (row) => {
@@ -178,7 +344,6 @@ const sendCommondSubmit = async () => {
         content: sendCommondForm.value.content,
     }
     let res = await sendMachineCommond(request)
-    console.log(res);
     if (res.code === 2000) {
         ElMessage.success("指令发送成功")
         sendCommondDisable.value = false

@@ -86,11 +86,11 @@ func SelAdmin(params *params.SelAdminParam, admin *models.MonAdmin, url string, 
 		}
 		list = append(list, date)
 	}
-	err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf("%v 在 %v 查看了管理员信息列表",
-		admin.Username, t))
-	if err != nil {
-		ubzer.MLog.Error(fmt.Sprintf("记录 %v 在 %v 查看管理员信息列表日志失败", admin.Username, t))
-	}
+	//err = daos.RecordOperateLog(admin.Id, admin.Username, admin.RealName, url, method, fmt.Sprintf("%v 在 %v 查看了管理员信息列表",
+	//	admin.Username, t))
+	//if err != nil {
+	//	ubzer.MLog.Error(fmt.Sprintf("记录 %v 在 %v 查看管理员信息列表日志失败", admin.Username, t))
+	//}
 
 	return count, list, nil
 }
