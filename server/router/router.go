@@ -18,7 +18,6 @@ import (
 func RunServer() {
 	e := echo.New()
 	bootstarp.InitBoot()
-
 	e.Static("/", "dist")
 	e.Static("/monitor/index", "dist")
 	e.Static("/monitor/board", "dist")
