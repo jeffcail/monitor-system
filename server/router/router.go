@@ -52,6 +52,11 @@ func RunServer() {
 	e.POST("/api/login", handler.Login)
 	e.GET("/api/dl", handler.Download)
 
+	// 初始化客户端
+	e.GET("/init/client", handler.InitClient)
+	// 客户端升级
+	e.GET("/client/up", handler.ClientUpgrade)
+
 	//管理员增删改查
 	admin := e.Group("/api/admin")
 	admin.Use(middle.AuthCheck())

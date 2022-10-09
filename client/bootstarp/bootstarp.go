@@ -3,12 +3,6 @@ package bootstarp
 import (
 	"flag"
 
-	"github.com/go-xorm/xorm"
-
-	"bz.service.cloud.monitoring/common/db"
-	"bz.service.cloud.monitoring/common/driver"
-	"bz.service.cloud.monitoring/common/utils"
-
 	"bz.service.cloud.monitoring/common/ubzer"
 
 	"bz.service.cloud.monitoring/client/config"
@@ -29,28 +23,10 @@ func init() {
 func InitBoot() {
 	parseRemoteConfig(*ip, *port, *cfg)
 	ubzer.InitLogger(config.Config().ClientLoggerPath)
-	initRedis()
-	initMysql()
 	machine.GenerateUniqueMachineCode()
 }
 
 // parseRemoteConfig
 func parseRemoteConfig(ip string, port int, cfg string) {
 	config.ParseConfig(ip, port, cfg)
-}
-
-// initRedis
-func initRedis() {
-	rc, err := driver.Rc.CreateRedis(config.Config().Redis)
-	utils.CheckErr(err)
-	db.DB.SetRedis(rc)
-}
-
-// initMysql
-func initMysql() {
-	engine, err := driver.My.CreateMysql(config.Config().Mysql)
-	utils.CheckErr(err)
-	engine.SetLogger(xorm.NewSimpleLogger(ubzer.XLogger))
-	engine.ShowSQL(config.Config().Mysql.ShowSQL)
-	db.DB.SetMysql(engine)
 }

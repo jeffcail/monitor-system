@@ -2,8 +2,11 @@ package job
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
+
+	"github.com/gorilla/websocket"
 
 	"github.com/spf13/cast"
 
@@ -11,8 +14,6 @@ import (
 
 	"go.uber.org/zap"
 
-	"bz.service.cloud.monitoring/client/models"
-	"bz.service.cloud.monitoring/common/db"
 	"bz.service.cloud.monitoring/common/ubzer"
 	"bz.service.cloud.monitoring/common/utils"
 )
@@ -23,26 +24,52 @@ func CheckClientVersion() {
 	ip := utils.GetIP()
 	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 拿到ip: %v =============", ip))
 
-	m := &models.MonUpgradeMachineRecord{}
-	has, err := db.Mysql.Where("machine_ip = ?", ip).Desc("id").Limit(1).Get(m)
+	dl := websocket.Dialer{}
+	d := "ws://" + config.Config().GoFileServe + "/client/up"
+	//d := "ws://192.168.0.159:9092/init/client"
+	conn, _, err := dl.Dial(d, nil)
 	if err != nil {
-		ubzer.MLog.Error(fmt.Sprintf("=======  开始检测升级 定时从数据库中检测客户端最新版本失败 ip: %v", ip), zap.Error(err))
+		ubzer.MLog.Error(fmt.Sprintf("============ 开始检测升级 连接服务端websocket失败 ============="), zap.Error(err))
+	}
+	type Message struct {
+		Ip string `json:"ip"`
+	}
+	m := &Message{Ip: ip}
+	res, _ := json.Marshal(m)
+	err = conn.WriteMessage(websocket.TextMessage, res)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("============ 开始检测升级 连接服务端websocket发送客户端ip失败 ============="), zap.Error(err))
+	}
+
+	_, resContent, err := conn.ReadMessage()
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("============ 开始检测升级 连接服务端websocket接收服务端推送过来的数据失败 ============="), zap.Error(err))
+	}
+
+	type CMessage struct {
+		PackageName    string `json:"package_name"`
+		UpgradeVersion string `json:"upgrade_version"`
+	}
+	cm := &CMessage{}
+	_ = json.Unmarshal(resContent, cm)
+	fmt.Printf("============cm: %v", cm)
+
+	if cm.UpgradeVersion == "" && cm.PackageName == "" {
+		ubzer.MLog.Info(fmt.Sprintf("=======  开始检测升级 从数据库中没有拿到ip为: %v 的数据 =============", ip))
+		ubzer.MLog.Error(fmt.Sprintf("=======  开始检测升级 此客户端: %v 没有要升级的版本 =============", ip), zap.Error(err))
 		return
 	}
-	if !has {
-		ubzer.MLog.Info(fmt.Sprintf("=======  开始检测升级 从数据库中没有拿到ip为: %v 的数据", ip))
-		return
-	}
+
 	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 拿到最新的升级记录: %v =============", m))
 
 	content, err := os.ReadFile("./version.txt")
 	if err != nil {
-		ubzer.MLog.Error(fmt.Sprintf("=======  开始检测升级 定时检测更新客户端版本 读取版本号失败"), zap.Error(err))
+		ubzer.MLog.Error(fmt.Sprintf("=======  开始检测升级 定时检测更新客户端版本 读取版本号失败 ============="), zap.Error(err))
 		return
 	}
 	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 当前版本号文件保存的版本为: %v =============", string(content)))
-	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 要升级的版本为: %v =============", m.UpgradeVersion))
-	if utils.LessThenAndEqual(m.UpgradeVersion, string(content)) {
+	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 要升级的版本为: %v =============", cm.UpgradeVersion))
+	if utils.LessThenAndEqual(cm.UpgradeVersion, string(content)) {
 		ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 当前没有可升级的版本 ============="))
 		return
 	}
@@ -53,7 +80,7 @@ func CheckClientVersion() {
 	}
 	defer file2.Close()
 
-	str := m.UpgradeVersion
+	str := cm.UpgradeVersion
 	writer := bufio.NewWriter(file2)
 	_, err = writer.WriteString(str)
 	if err != nil {
@@ -66,7 +93,7 @@ func CheckClientVersion() {
 
 	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 版本写入版本控制文件成功 ============="))
 
-	pn := ip + ":" + m.PackageName + ":" + m.UpgradeVersion
+	pn := ip + ":" + cm.PackageName + ":" + cm.UpgradeVersion
 	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 要升级的包名: %v =============", pn))
 
 	exec := "wget " + config.Config().GoFileServe + "/api/dl\\?file\\=" + pn
@@ -85,9 +112,9 @@ func CheckClientVersion() {
 		return
 	}
 	// 检测保留最近三份包
-	err = utils.ExecCommand("rm -f /root/client/client:" + cast.ToString(cast.ToInt(m.UpgradeVersion)-3))
+	err = utils.ExecCommand("rm -f /root/client/client:" + cast.ToString(cast.ToInt(cm.UpgradeVersion)-3))
 	if err != nil {
-		ubzer.MLog.Error(fmt.Sprintf("=======  开始检测升级 删除历史包 : %v失败", "client:"+cast.ToString(cast.ToInt(m.UpgradeVersion)-3)), zap.Error(err))
+		ubzer.MLog.Error(fmt.Sprintf("=======  开始检测升级 删除历史包 : %v失败", "client:"+cast.ToString(cast.ToInt(cm.UpgradeVersion)-3)), zap.Error(err))
 		return
 	}
 
@@ -106,49 +133,4 @@ func CheckClientVersion() {
 
 	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 准备启动客户端程序 ============="))
 	os.Exit(1)
-
-	//err = utils.ExecCommand("cd /etc/systemd/system && systemctl start client-monitor.service")
-	//if err != nil {
-	//	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 启动客户端服务失败 ============="), zap.Error(err))
-	//	return
-	//}
-	//ubzer.MLog.Info(fmt.Sprintf("=======  开始检测升级 定时检测更新客户端版本成功, 原版本号为: %v 更新成功的版本号为: %v", string(content),
-	//	m.UpgradeVersion))
-
-	//err = utils.ExecCommand("./" + pn + " uninstall")
-	//if err != nil {
-	//	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 卸载客户端服务失败 ============="), zap.Error(err))
-	//	return
-	//}
-	//
-	//err = utils.ExecCommand("./" + pn + " install")
-	//if err != nil {
-	//	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 安装客户端服务失败 ============="), zap.Error(err))
-	//	return
-	//}
-	//
-	//err = utils.ExecCommand("cd /etc/systemd/system && systemctl start client-monitor.service")
-	//if err != nil {
-	//	ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 启动客户端服务失败 ============="), zap.Error(err))
-	//	return
-	//}
-
-	//err = utils.ExecCommand("kill -9 `cat pidfile.txt`")
-	//if err != nil {
-	//	ubzer.MLog.Error(fmt.Sprintf("定时检测更新客户端版本 杀死原版本失败: %v 要更新的版本号为: %v", string(content),
-	//		m.UpgradeVersion))
-	//	return
-	//}
-	//ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 杀死要升级的服务的进程成功 ============="))
-	//
-	//exec2 := "nohup ./ " + pn + " > nohup.out & echo $! > pidfile.txt"
-	//ubzer.MLog.Info(fmt.Sprintf("============ 开始检测升级 开始启动进程的命令为: %v =============", exec2))
-	//err = utils.ExecCommand(exec2)
-	//if err != nil {
-	//	ubzer.MLog.Error(fmt.Sprintf("定时检测更新客户端版本失败 原版本号为: %v 要更新的版本号为: %v", string(content),
-	//		m.UpgradeVersion))
-	//} else {
-	//	ubzer.MLog.Info(fmt.Sprintf("定时检测更新客户端版本成功, 原版本号为: %v 更新成功的版本号为: %v", string(content),
-	//		m.UpgradeVersion))
-	//}
 }

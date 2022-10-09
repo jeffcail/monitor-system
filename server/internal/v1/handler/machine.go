@@ -2,6 +2,7 @@ package handler
 
 import (
 	"crypto/md5"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -9,6 +10,10 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"bz.service.cloud.monitoring/common/db"
+
+	"bz.service.cloud.monitoring/server/internal/v1/models"
 
 	"github.com/gorilla/websocket"
 
@@ -251,7 +256,73 @@ func Download(c echo.Context) error {
 	return c.Attachment(config.Config().UpClientPkgPath+file, file)
 }
 
-//// DeleteMachine
-//func DeleteMachine(c echo.Context) error {
-//
-//}
+type SClient struct {
+	Conn *websocket.Conn
+	Send chan *CMessage
+}
+
+type CMessage struct {
+	PackageName    string `json:"package_name"`
+	UpgradeVersion string `json:"upgrade_version"`
+}
+
+var (
+	Sc      *SClient
+	upgrade = &websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
+)
+
+func (s *SClient) writeC(pn string, version string) {
+	m := &CMessage{
+		PackageName:    pn,
+		UpgradeVersion: version,
+	}
+	res, _ := json.Marshal(m)
+	err := s.Conn.WriteMessage(websocket.TextMessage, res)
+	if err != nil {
+		ubzer.MLog.Error("往客户端推送系统信息失败", zap.Error(err))
+	}
+}
+
+// ClientUpgrade
+func ClientUpgrade(c echo.Context) error {
+	conn, err := upgrade.Upgrade(c.Response(), c.Request(), nil)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("websocket 服务升级失败"), zap.Error(err))
+		return err
+	}
+	Sc = &SClient{
+		Conn: conn,
+		Send: make(chan *CMessage, 100),
+	}
+	// 从客户端读取数据
+	type CliMessage struct {
+		Ip string `json:"ip"`
+	}
+	_, content, err := conn.ReadMessage()
+	if err != nil {
+		ubzer.MLog.Error("获取客户端升级推送过来的数据失败", zap.Error(err))
+	}
+	cm := &CliMessage{}
+	_ = json.Unmarshal(content, cm)
+	fmt.Printf("======================cm: %v", cm)
+
+	m := &models.MonUpgradeMachineRecord{}
+	has, err := db.Mysql.Where("machine_ip = ?", cm.Ip).Desc("id").Limit(1).Get(m)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("=======  开始检测升级 定时从数据库中检测客户端最新版本失败 ip: %v", cm.Ip), zap.Error(err))
+		return nil
+	}
+	if !has {
+		ubzer.MLog.Info(fmt.Sprintf("=======  开始检测升级 从数据库中没有拿到ip为: %v 的数据", cm.Ip))
+		return nil
+	}
+	go Sc.writeC(m.PackageName, m.UpgradeVersion)
+
+	return nil
+}

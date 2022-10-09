@@ -2,13 +2,15 @@ package machine
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 
-	"bz.service.cloud.monitoring/client/daos"
-	"github.com/google/uuid"
+	"bz.service.cloud.monitoring/client/config"
 
-	"github.com/labstack/echo"
+	"github.com/gorilla/websocket"
+
+	"github.com/google/uuid"
 
 	"go.uber.org/zap"
 
@@ -23,39 +25,46 @@ func GenerateUniqueMachineCode() {
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("获取机器hostname失败 机器ip: %v", ip), zap.Error(err))
 	}
-	//
-	// 从缓存中拿机器码
-	getMachineCode, err := daos.GetMachineCode(ip)
+	dl := websocket.Dialer{}
+	d := "ws://" + config.Config().GoFileServe + "/init/client"
+	//d := "ws://192.168.0.159:9092/init/client"
+	conn, _, err := dl.Dial(d, nil)
 	if err != nil {
-		ubzer.MLog.Error(fmt.Sprintf("从缓存中获取唯一机器码失败"), zap.Error(err))
+		ubzer.MLog.Error(fmt.Sprintf("初始化客户端 连接服务端websocket失败"), zap.Error(err))
 	}
 
-	if getMachineCode == "" {
-		// 从数据库中拿
-		m, err := daos.GetMachineInfoFromDbByIp(ip)
-		if err != nil {
-			ubzer.MLog.Error(fmt.Sprintf("从数据库中获取唯一机器码失败"), zap.Error(err))
-		}
-		if m.Id == 0 {
-			// 数据库中不存在 第一次部署
-
-			uid := uuid.New().String()
-			code := machineCode(ip, uid)
-			err = daos.SetMachineCode(ip, code)
-			if err != nil {
-				ubzer.MLog.Error(fmt.Sprintf("生成唯一机器码写入缓存失败 code: %v", code), zap.Error(err))
-			}
-
-			err = daos.SaveHostName(name, code, ip)
-			if err != nil {
-				ubzer.MLog.Error(fmt.Sprintf("生成唯一机器码之后保存服务器信息失败 ip: %v code: %v name: %v",
-					ip, code, name), zap.Error(err))
-			}
-
-			writeFirstVersion()
-		}
+	type SMessage struct {
+		Ip          string `json:"ip"`
+		HostName    string `json:"host_name"`
+		MachineCode string `json:"machine_code"`
+	}
+	m := &SMessage{
+		Ip:          ip,
+		HostName:    name,
+		MachineCode: machineCode(ip, uuid.New().String()),
 	}
 
+	res, _ := json.Marshal(m)
+	err = conn.WriteMessage(websocket.TextMessage, res)
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("初始化客户端 连接服务端发送数据失败"), zap.Error(err))
+	}
+	_, content, err := conn.ReadMessage()
+	fmt.Printf("=======content: %v", string(content))
+	if err != nil {
+		ubzer.MLog.Error(fmt.Sprintf("初始化客户端 连接服务端接收数据失败"), zap.Error(err))
+	}
+
+	type ResponseContent struct {
+		Exists int `json:"exists"`
+	}
+	rc := &ResponseContent{}
+	_ = json.Unmarshal(content, rc)
+	fmt.Printf("============rc.exists: %d , %T", rc.Exists, rc.Exists)
+	if rc.Exists == 2 {
+		ubzer.MLog.Info("开始创建版本号文件")
+		writeFirstVersion()
+	}
 }
 
 // writeFirstVersion
@@ -76,6 +85,7 @@ func writeFirstVersion() {
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("版本号写入文件失败"), zap.Error(err))
 	}
+	ubzer.MLog.Info(fmt.Sprintf("版本号文件创建成功"))
 }
 
 func machineCode(ip, uid string) string {
@@ -86,13 +96,9 @@ func getIp() string {
 	return utils.GetIP()
 }
 
-// ReceiveCom
-func ReceiveCom(c echo.Context) error {
-	content := c.FormValue("content")
-	err := utils.ExecCommand(content)
-	if err != nil {
-		ubzer.MLog.Error("指令执行失败", zap.Error(err))
-		return err
-	}
-	return nil
+// GetHostName
+// 获取系统主机名
+func GetHostName() (string, error) {
+	hostname, err := os.Hostname()
+	return hostname, err
 }
