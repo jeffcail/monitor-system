@@ -1,26 +1,16 @@
 package config
 
-import (
-	"bz.service.cloud.monitoring/common/driver"
-	"bz.service.cloud.monitoring/common/nacos"
+import _conf "bz.service.cloud.monitoring/client/conf"
+
+var (
+	config *_conf.MonitorConfig
 )
 
-type ClientGlobalConfig struct {
-	Debug            bool
-	ClientHttpBind   string
-	Redis            driver.RedisConfig
-	Mysql            driver.MysqlConfig
-	ClientLoggerPath string
-	GoFileServe      string
-}
-
-var config ClientGlobalConfig
-
-func Config() ClientGlobalConfig {
+func Config() *_conf.MonitorConfig {
 	return config
 }
 
 // ParseConfig
-func ParseConfig(ip string, port int, cfg string) {
-	nacos.Nac.ParseConfig(ip, port, cfg, &config)
+func ParseConfig() {
+	config = _conf.LoadMonitorConfig()
 }

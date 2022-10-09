@@ -18,7 +18,7 @@ func RunClientServer() {
 	})
 
 	e.GET("/ping2", func(context echo.Context) error {
-		return context.JSON(http.StatusOK, "pong")
+		return context.JSON(http.StatusOK, "pong2")
 	})
 
 	// 客户端系统信息改为 websocket

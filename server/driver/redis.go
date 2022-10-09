@@ -6,20 +6,12 @@ import (
 	"gopkg.in/redis.v5"
 )
 
-var Rc *RedisConfig
-
-type RedisConfig struct {
-	RedisAddr string
-	Password  string
-	RedisDb   int
-}
-
 // CreateRedis
-func (r *RedisConfig) CreateRedis(config RedisConfig) (*redis.Client, error) {
+func CreateRedis(addr string, password string, db int) (*redis.Client, error) {
 	rc := redis.NewClient(&redis.Options{
-		Addr:     config.RedisAddr,
-		Password: config.Password,
-		DB:       config.RedisDb,
+		Addr:     addr,
+		Password: password,
+		DB:       db,
 	})
 	_, err := rc.Ping().Result()
 	utils.CheckErr(err)

@@ -14,27 +14,21 @@ import (
 	"bz.service.cloud.monitoring/common/ubzer"
 )
 
-var (
-	ip   = flag.String("ip", "192.168.0.125", "The config of ip address")
-	port = flag.Int("p", 7848, "The config of port")
-	cfg  = flag.String("c", "service-cloud-monitor.yml", "The path of configuration file")
-)
-
 func init() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	flag.Parse()
 }
 
 func InitBoot() {
-	parseRemoteConfig(*ip, *port, *cfg)
+	parseRemoteConfig()
 	initLogger()
 	initMysql()
 	initRedis()
 }
 
 // parseRemoteConfig
-func parseRemoteConfig(ip string, port int, cfg string) {
-	config.ParseConfig(ip, port, cfg)
+func parseRemoteConfig() {
+	config.ParseConfig()
 }
 
 // initLogger
@@ -44,16 +38,15 @@ func initLogger() {
 
 // initMysql
 func initMysql() {
-	engine, err := driver.My.CreateMysql(config.Config().Mysql)
+	engine, err := driver.CreateMysql(config.Config().DbDsn, config.Config().ShowSql)
 	utils.CheckErr(err)
 	engine.SetLogger(xorm.NewSimpleLogger(ubzer.XLogger))
-	engine.ShowSQL(config.Config().Mysql.ShowSQL)
 	db.DB.SetMysql(engine)
 }
 
 // initRedis
 func initRedis() {
-	rc, err := driver.Rc.CreateRedis(config.Config().Redis)
+	rc, err := driver.CreateRedis(config.Config().RedisAddr, config.Config().Password, config.Config().RedisDb)
 	utils.CheckErr(err)
 	db.DB.SetRedis(rc)
 }
