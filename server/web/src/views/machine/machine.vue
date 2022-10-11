@@ -61,12 +61,12 @@
                     @click="upgradeClientView(row)"
                     >升级客户端</el-button>
 
-                    <!-- <el-button
+                    <el-button
                     size="big"
                     type="success"
                     @click="showConsole(row)"
                     ><el-icon><Monitor /></el-icon></el-button
-                    > -->
+                    >
             </el-table-column>
         </el-table>
 
@@ -169,7 +169,7 @@
         </el-dialog>
 
 
-    <!-- <el-dialog v-model="dialSshVisiable" title="Tips" width="30%" draggable>
+    <el-dialog v-model="dialSshVisiableShow" title="终端" width="30%" draggable>
         
         <el-form :model="dialSshForm">
             <el-form-item>
@@ -187,11 +187,11 @@
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialSshVisiable = false">取消</el-button>
-        <el-button type="primary" @click="dialSsh">🔗</el-button>
+        <el-button @click="dialSshVisiableShow = false">取消</el-button>
+        <el-button type="primary" @click="connectSsh">🔗</el-button>
       </span>
     </template>
-  </el-dialog> -->
+  </el-dialog>
 
 
 </template>
@@ -298,9 +298,6 @@ const handleUpgradeClientCurrentChange = () => {
     upgradeClientRecords();
 }
 
-
-
-
 // 备注
 const addMachineRemark = async (row) => {
     let request = {
@@ -351,12 +348,26 @@ const sendCommondSubmit = async () => {
     }
 }
 
+const dialSshVisiableShow = ref(false);
+const dialSshForm = ref({
+    ip: "",
+    name: "",
+    password:""
+})
 
 const showConsole = (row) => {
+    dialSshVisiableShow.value = true
+    dialSshForm.value.ip = row.ip
+    dialSshForm.value.name = row.name
+    dialSshForm.value.password = row.password
+}
+
+const connectSsh = (row) => {
+    // console.log(dialSshForm.value);
     sessionStorage.setItem(`url`, `/monitor/machine/dial`)
     router.push({
         path: "/monitor/machine/dial",
-        query: {id: row.ip}
+        query: {ip: row.ip}
     })
 }
 

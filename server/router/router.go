@@ -56,6 +56,12 @@ func RunServer() {
 	e.GET("/init/client", handler.InitClient)
 	// 客户端升级
 	e.GET("/client/up", handler.ClientUpgrade)
+	// 接收客户端cpu使用率
+	e.GET("/client/cpu", handler.ClientCpu)
+	// 接收客户端mem使用率
+	e.GET("/client/mem", handler.ClientMemory)
+	// 接收客户端disk使用率
+	e.GET("/client/disk", handler.ClientDisk)
 
 	//管理员增删改查
 	admin := e.Group("/api/admin")
@@ -136,6 +142,7 @@ func RunServer() {
 	}
 
 	e.GET("/ssh", handler.RunWebSSH)
+	//e.GET("/close/ssh", handler.CloseSsh)
 
 	e.Logger.Fatal(e.Start(config.Config().HTTPBind))
 }

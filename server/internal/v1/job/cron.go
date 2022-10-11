@@ -2,11 +2,10 @@ package job
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"bz.service.cloud.monitoring/server/internal/v1/models"
-
-	"bz.service.cloud.monitoring/common/request"
 
 	"go.uber.org/zap"
 
@@ -25,11 +24,11 @@ func checkServeList() {
 	}
 	for _, v := range allServe {
 		checkTime := time.Now()
-		res, err := request.Get(v.ServeAddress)
+		res, err := http.Head(v.ServeAddress)
 		if err != nil {
 			ubzer.MLog.Error(fmt.Sprintf("检测服务: %v 地址: %v ping不通", v.ServeName, v.ServeAddress))
 		}
-		if string(res) != "pong" {
+		if res == nil || res.StatusCode != 200 {
 			serveState = 2
 			scr := &models.MonServeCheckRecord{
 				ServeId:       v.Id,

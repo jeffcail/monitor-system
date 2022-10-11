@@ -19,8 +19,8 @@ type MonitorConfig struct {
 func LoadMonitorConfig() *MonitorConfig {
 	var err error
 
-	Cfg, err = ini.Load("/root/client/conf/conf.ini")
-	//Cfg, err = ini.Load("conf/conf.ini")
+	//Cfg, err = ini.Load("/root/client/conf/conf.ini")
+	Cfg, err = ini.Load("conf/conf.ini")
 	if err != nil {
 		log.Fatal(2, "Fail to parse conf", err)
 	}

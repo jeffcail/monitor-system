@@ -17,17 +17,13 @@ func RunClientServer() {
 		return context.JSON(http.StatusOK, "pong")
 	})
 
-	e.GET("/ping2", func(context echo.Context) error {
-		return context.JSON(http.StatusOK, "pong2")
-	})
-
-	// 客户端系统信息改为 websocket
-	sys := e.Group("/c/sys")
-	{
-		sys.GET("/cpu", machine.WsGetCpuSample)
-		sys.GET("/mem", machine.WsGetMemSample)
-		sys.GET("/disk", machine.WsGetDiskSample)
-	}
+	//// 客户端系统信息改为 websocket -- 废弃
+	//sys := e.Group("/c/sys")
+	//{
+	//	sys.GET("/cpu", machine.WsGetCpuSample)
+	//	sys.GET("/mem", machine.WsGetMemSample)
+	//	sys.GET("/disk", machine.WsGetDiskSample)
+	//}
 
 	m := e.Group("/c/machine")
 	{

@@ -60,6 +60,7 @@ func RunWebSSH(c echo.Context) error {
 		ubzer.MLog.Error("websocket upgrade 失败", zap.Error(err))
 	}
 	mssh.Websocket = webConn
+
 	sshClient, err := ssh.Dial("tcp", "192.168.0.125:22", &ssh.ClientConfig{
 		User:            "root",
 		Auth:            []ssh.AuthMethod{ssh.Password("112233")},
@@ -72,6 +73,7 @@ func RunWebSSH(c echo.Context) error {
 	}
 
 	session, err := sshClient.NewSession()
+	//defer session.Close()
 	if err != nil {
 		ubzer.MLog.Error("打开一个新会话失败", zap.Error(err))
 		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "开启会话失败", ""))
@@ -85,17 +87,17 @@ func RunWebSSH(c echo.Context) error {
 	}
 
 	sshOut := new(wsBufferWriter)
-	session.Stdout = sshOut
-	session.Stderr = sshOut
-	mssh.Stdout = sshOut
+	session.Stdout = sshOut // 会话输出关联到系统标准输出设备
+	session.Stderr = sshOut // 会话错误输出关联到系统标准错误输出设备
+	mssh.Stdout = sshOut    // 会话输入关联到系统标准输入设备
 
 	modes := ssh.TerminalModes{
-		ssh.ECHO:          1,
+		ssh.ECHO:          1, // 禁用回显（0禁用，1启动）
 		ssh.TTY_OP_ISPEED: 14400,
 		ssh.TTY_OP_OSPEED: 14400,
 	}
 
-	if err = session.RequestPty("xterm", 30, 120, modes); err != nil {
+	if err = session.RequestPty("linux", 30, 120, modes); err != nil {
 		ubzer.MLog.Error("绑定pty失败", zap.Error(err))
 		return c.JSON(http.StatusOK, utils.Res.ResponseJson(false, _const.Fail, "绑定pty失败", ""))
 	}
@@ -105,6 +107,7 @@ func RunWebSSH(c echo.Context) error {
 	// 执行远程命令
 	go Send2SSH(mssh)
 	go Send2Web(mssh)
+
 	return c.JSON(http.StatusOK, utils.Res.ResponseJson(true, _const.Success, "成功", ""))
 }
 
@@ -136,3 +139,27 @@ func Send2Web(mssh *MSsh) {
 		}
 	}
 }
+
+//func CloseSsh(c echo.Context) error {
+//	mssh := &MSsh{}
+//	upGrader := websocket.Upgrader{
+//		ReadBufferSize:  1024,
+//		WriteBufferSize: 1024,
+//		CheckOrigin: func(r *http.Request) bool {
+//			return true
+//		},
+//		Subprotocols: []string{"service-cloud-monitoring"},
+//	}
+//	webConn, err := upGrader.Upgrade(c.Response().Writer, c.Request(), nil)
+//	if err != nil {
+//		ubzer.MLog.Error("websocket upgrade 失败", zap.Error(err))
+//	}
+//	mssh.Websocket = webConn
+//	_, readContent, _ := mssh.Websocket.ReadMessage()
+//	fmt.Printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ %v", string(readContent))
+//	if string(readContent) == "close" {
+//		mssh.Session.Wait()
+//		fmt.Printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 关闭ssh成功")
+//	}
+//	return nil
+//}

@@ -1,7 +1,7 @@
-<!-- <template>  
-    <div class="go_out">
+<template>  
+    <!-- <div class="go_out">
         <button @click="go_out">关闭终端</button>
-    </div>
+    </div> -->
 
     <div class="term1">
         <div ref="terminalBox" style="height: 60vh;"></div>
@@ -13,11 +13,14 @@ import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { ref, onMounted } from 'vue'
-import { ElMessage } from "naive-ui";
+import { useRouter } from 'vue-router';
 
 let terminalBox = ref(null)
 let term
 let socket
+let socket2
+const router = useRouter();
+
 
 onMounted(() => {
     //创建一个客户端
@@ -45,7 +48,7 @@ onMounted(() => {
         term.onData(function (data) {
             // socket.send(JSON.stringify({ type: "stdin", data: data }))
             socket.send(data)
-            console.log(data)
+            // console.log(data)
         });
         // ElMessage.success("会话成功连接！")
     }
@@ -72,8 +75,7 @@ onMounted(() => {
 })
 
 const go_out = () => {
-    socket.close()
-
+    
 }
 
 
@@ -91,4 +93,4 @@ const go_out = () => {
     margin-top: 20px;
     margin-bottom: 20px;
 }
-</style> -->
+</style>
