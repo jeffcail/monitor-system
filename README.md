@@ -53,4 +53,4 @@ cd /etc/systemd/system && systemctl start cli-service.service
 ```
 
 ### web vue代码
-[server-monitor-web-upgrade](https://github.com/jeffcail/server-monitor-web)
+[server-monitor-web-upgrade](https://github.com/jeffcail/server-monitor-web-upgrade)
