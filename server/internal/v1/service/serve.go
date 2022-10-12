@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"time"
 
-	_const "bz.service.cloud.monitoring/common/const"
+	_const "github.com/c/server-monitoring/common/const"
 
-	"bz.service.cloud.monitoring/server/internal/v1/models"
+	"github.com/c/server-monitoring/server/internal/v1/models"
 
 	"go.uber.org/zap"
 
-	"bz.service.cloud.monitoring/server/internal/v1/daos"
+	"github.com/c/server-monitoring/server/internal/v1/daos"
 
-	"bz.service.cloud.monitoring/common/request"
-	"bz.service.cloud.monitoring/common/ubzer"
-	params2 "bz.service.cloud.monitoring/server/internal/v1/params"
+	"github.com/c/server-monitoring/common/request"
+	"github.com/c/server-monitoring/common/ubzer"
+	params2 "github.com/c/server-monitoring/server/internal/v1/params"
 )
 
 type ServeListView struct {

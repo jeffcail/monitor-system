@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"time"
 
-	_const "bz.service.cloud.monitoring/common/const"
-	"bz.service.cloud.monitoring/common/ubzer"
-	"bz.service.cloud.monitoring/server/config"
-	"bz.service.cloud.monitoring/server/internal/v1/daos"
-	"bz.service.cloud.monitoring/server/internal/v1/models"
-	params "bz.service.cloud.monitoring/server/internal/v1/params"
-	"bz.service.cloud.monitoring/server/utils"
+	_const "github.com/c/server-monitoring/common/const"
+	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/server-monitoring/server/config"
+	"github.com/c/server-monitoring/server/internal/v1/daos"
+	"github.com/c/server-monitoring/server/internal/v1/models"
+	params "github.com/c/server-monitoring/server/internal/v1/params"
+	"github.com/c/server-monitoring/server/utils"
 	"go.uber.org/zap"
 )
 

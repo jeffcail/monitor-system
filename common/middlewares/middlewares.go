@@ -4,7 +4,7 @@ import (
 	"runtime"
 	"strings"
 
-	"bz.service.cloud.monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/ubzer"
 
 	"github.com/labstack/echo/middleware"
 

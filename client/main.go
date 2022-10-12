@@ -5,10 +5,10 @@ import (
 	"os"
 	"sync"
 
-	"bz.service.cloud.monitoring/client/job"
+	"github.com/c/server-monitoring/client/job"
 
-	"bz.service.cloud.monitoring/client/bootstarp"
-	"bz.service.cloud.monitoring/client/router"
+	"github.com/c/server-monitoring/client/bootstarp"
+	"github.com/c/server-monitoring/client/router"
 
 	"github.com/kardianos/service"
 )

@@ -8,17 +8,17 @@ import (
 	"os"
 	"strings"
 
-	"bz.service.cloud.monitoring/server/config"
+	"github.com/c/server-monitoring/server/config"
 
-	"bz.service.cloud.monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/ubzer"
 	"github.com/spf13/cast"
 	"go.uber.org/zap"
 
-	"bz.service.cloud.monitoring/server/internal/v1/service"
+	"github.com/c/server-monitoring/server/internal/v1/service"
 
-	_const "bz.service.cloud.monitoring/common/const"
-	"bz.service.cloud.monitoring/common/utils"
-	"bz.service.cloud.monitoring/server/internal/v1/params"
+	_const "github.com/c/server-monitoring/common/const"
+	"github.com/c/server-monitoring/common/utils"
+	"github.com/c/server-monitoring/server/internal/v1/params"
 	"github.com/labstack/echo"
 )
 
@@ -129,7 +129,7 @@ func UpgradeServe(c echo.Context) error {
 	//p := make(map[string]interface{})
 	//p["package_name"] = param.PackageName
 	//p["package_path"] = param.PackagePath
-	//res, err := request.GetParams("http://"+param.ServeIp+":9093/c/serve/upgrade", header, p)
+	//res, err := request.GetParams("http://"+param.ServeIp+":8888/c/serve/upgrade", header, p)
 	//ubzer.MLog.Info(fmt.Sprintf("升级=========== res: %v", string(res)))
 	//if err != nil {
 	//	ubzer.MLog.Error(fmt.Sprintf("升级服务请求失败 ServeAddress: %v", param.ServeIp), zap.Error(err))

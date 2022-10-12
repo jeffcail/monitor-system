@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"bz.service.cloud.monitoring/common/db"
+	"github.com/c/server-monitoring/common/db"
 
 	"go.uber.org/zap"
 
-	"bz.service.cloud.monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/ubzer"
 
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"

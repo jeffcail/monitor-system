@@ -3,13 +3,13 @@ package router
 import (
 	"time"
 
-	"bz.service.cloud.monitoring/server/internal/v1/handler"
+	"github.com/c/server-monitoring/server/internal/v1/handler"
 
-	"bz.service.cloud.monitoring/common/middlewares"
-	"bz.service.cloud.monitoring/common/ubzer"
-	"bz.service.cloud.monitoring/server/bootstarp"
-	"bz.service.cloud.monitoring/server/config"
-	middle "bz.service.cloud.monitoring/server/internal/v1/middlewares"
+	"github.com/c/server-monitoring/common/middlewares"
+	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/server-monitoring/server/bootstarp"
+	"github.com/c/server-monitoring/server/config"
+	middle "github.com/c/server-monitoring/server/internal/v1/middlewares"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -124,7 +124,6 @@ func RunServer() {
 		machine.POST("/update/remark", handler.UpdateMachineRemark)
 		machine.POST("/upgrade", handler.UpgradeClientMachine)
 		machine.POST("/upgrade/record", handler.UpgradeClientMachineRecord)
-		//machine.GET("/ssh", handler.RunWebSSH)
 		//machine.POST("/delete", handler.DeleteMachine)
 	}
 
@@ -141,8 +140,7 @@ func RunServer() {
 		wn.POST("/ignore/machine/check/record", handler.IgnoreMachineCheckRecord)
 	}
 
-	e.GET("/ssh", handler.RunWebSSH)
-	//e.GET("/close/ssh", handler.CloseSsh)
+	e.GET("/ssh", handler.ShellWeb)
 
 	e.Logger.Fatal(e.Start(config.Config().HTTPBind))
 }

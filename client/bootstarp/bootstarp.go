@@ -1,10 +1,10 @@
 package bootstarp
 
 import (
-	"bz.service.cloud.monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/ubzer"
 
-	"bz.service.cloud.monitoring/client/config"
-	"bz.service.cloud.monitoring/client/machine"
+	"github.com/c/server-monitoring/client/config"
+	"github.com/c/server-monitoring/client/machine"
 )
 
 // InitBoot

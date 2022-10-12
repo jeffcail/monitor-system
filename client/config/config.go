@@ -1,6 +1,6 @@
 package config
 
-import _conf "bz.service.cloud.monitoring/client/conf"
+import _conf "github.com/c/server-monitoring/client/conf"
 
 var (
 	config *_conf.MonitorConfig

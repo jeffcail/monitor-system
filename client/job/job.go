@@ -6,10 +6,10 @@ import "github.com/robfig/cron"
 func BeginJob() {
 	c := cron.New()
 
-	//c.AddFunc("*/1200 * * * * ?", CheckClientVersion)
-	//c.AddFunc("*/2 * * * * ?", PushClientCpuPercent)
-	//c.AddFunc("*/2 * * * * ?", PushClientMemPercent)
-	//c.AddFunc("*/2 * * * * ?", PushClientDiskPercent)
+	c.AddFunc("*/1200 * * * * ?", CheckClientVersion)
+	c.AddFunc("*/30 * * * * ?", PushClientCpuPercent)
+	c.AddFunc("*/30 * * * * ?", PushClientMemPercent)
+	c.AddFunc("*/30 * * * * ?", PushClientDiskPercent)
 
 	c.Start()
 }

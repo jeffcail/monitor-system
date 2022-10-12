@@ -7,19 +7,19 @@ import (
 
 	"github.com/spf13/cast"
 
-	_const "bz.service.cloud.monitoring/common/const"
-	"bz.service.cloud.monitoring/common/utils"
-	params2 "bz.service.cloud.monitoring/server/internal/v1/params"
+	_const "github.com/c/server-monitoring/common/const"
+	"github.com/c/server-monitoring/common/utils"
+	params2 "github.com/c/server-monitoring/server/internal/v1/params"
 
-	"bz.service.cloud.monitoring/common/db"
+	"github.com/c/server-monitoring/common/db"
 
 	"github.com/gorilla/websocket"
 
-	"bz.service.cloud.monitoring/server/internal/v1/daos"
+	"github.com/c/server-monitoring/server/internal/v1/daos"
 
 	"go.uber.org/zap"
 
-	"bz.service.cloud.monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/ubzer"
 	"github.com/labstack/echo"
 )
 

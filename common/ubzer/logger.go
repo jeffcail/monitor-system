@@ -3,7 +3,7 @@ package ubzer
 import (
 	"os"
 
-	_const "bz.service.cloud.monitoring/common/const"
+	_const "github.com/c/server-monitoring/common/const"
 
 	"github.com/robfig/cron"
 

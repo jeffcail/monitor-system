@@ -6,14 +6,16 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/c/server-monitoring/client/config"
+
 	"github.com/gorilla/websocket"
 
 	"github.com/google/uuid"
 
 	"go.uber.org/zap"
 
-	"bz.service.cloud.monitoring/common/ubzer"
-	"bz.service.cloud.monitoring/common/utils"
+	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/utils"
 )
 
 // GenerateUniqueMachineCode
@@ -24,8 +26,7 @@ func GenerateUniqueMachineCode() {
 		ubzer.MLog.Error(fmt.Sprintf("获取机器hostname失败 机器ip: %v", ip), zap.Error(err))
 	}
 	dl := websocket.Dialer{}
-	//d := "ws://" + config.Config().GoFileServe + "/init/client"
-	d := "ws://192.168.0.159:9092/init/client"
+	d := "ws://" + config.Config().GoFileServe + "/init/client"
 	conn, _, err := dl.Dial(d, nil)
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("初始化客户端 连接服务端websocket失败"), zap.Error(err))

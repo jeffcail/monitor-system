@@ -4,14 +4,14 @@ import (
 	"flag"
 	"runtime"
 
-	"bz.service.cloud.monitoring/common/db"
+	"github.com/c/server-monitoring/common/db"
 
-	"bz.service.cloud.monitoring/common/utils"
-	"bz.service.cloud.monitoring/server/config"
-	"bz.service.cloud.monitoring/server/driver"
+	"github.com/c/server-monitoring/common/utils"
+	"github.com/c/server-monitoring/server/config"
+	"github.com/c/server-monitoring/server/driver"
 	"github.com/go-xorm/xorm"
 
-	"bz.service.cloud.monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/ubzer"
 )
 
 func init() {

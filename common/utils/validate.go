@@ -1,7 +1,7 @@
 package utils
 
 import (
-	validate2 "bz.service.cloud.monitoring/common/validate"
+	validate2 "github.com/c/server-monitoring/common/validate"
 	"github.com/go-playground/validator/v10"
 )
 

@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strings"
 
-	"bz.service.cloud.monitoring/server/internal/v1/models"
+	"github.com/c/server-monitoring/server/internal/v1/models"
 
-	"bz.service.cloud.monitoring/server/internal/v1/daos"
+	"github.com/c/server-monitoring/server/internal/v1/daos"
 
-	"bz.service.cloud.monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/ubzer"
 
-	"bz.service.cloud.monitoring/common/jwt"
+	"github.com/c/server-monitoring/common/jwt"
 
 	"github.com/labstack/echo"
 )

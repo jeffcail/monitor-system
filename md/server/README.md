@@ -30,7 +30,7 @@ RedisAddr && Password
 
 ### 6. 访问服务端控制台 
 
-**url:9092**
+**url:9999**
 
 账号: admin
 密码: 123456

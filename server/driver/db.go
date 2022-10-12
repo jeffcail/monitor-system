@@ -1,7 +1,7 @@
 package driver
 
 import (
-	"bz.service.cloud.monitoring/common/utils"
+	"github.com/c/server-monitoring/common/utils"
 	"github.com/go-xorm/xorm"
 )
 

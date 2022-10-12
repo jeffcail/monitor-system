@@ -9,7 +9,7 @@ import (
 
 const (
 	EXPIRE        = time.Hour * 24 * 365
-	SECRET string = "90fc4956fb1d4f0f963d8cc2a3bf86e934234223423"
+	SECRET string = "xxxxxxxxxxxxxxfasdfasdfsda"
 )
 
 type JwtClaims struct {

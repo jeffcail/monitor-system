@@ -5,11 +5,11 @@ import (
 
 	"github.com/spf13/cast"
 
-	"bz.service.cloud.monitoring/server/internal/v1/service"
+	"github.com/c/server-monitoring/server/internal/v1/service"
 
-	_const "bz.service.cloud.monitoring/common/const"
-	"bz.service.cloud.monitoring/common/utils"
-	"bz.service.cloud.monitoring/server/internal/v1/params"
+	_const "github.com/c/server-monitoring/common/const"
+	"github.com/c/server-monitoring/common/utils"
+	"github.com/c/server-monitoring/server/internal/v1/params"
 	"github.com/labstack/echo"
 )
 

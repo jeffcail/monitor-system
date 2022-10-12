@@ -1,7 +1,7 @@
 package driver
 
 import (
-	"bz.service.cloud.monitoring/common/utils"
+	"github.com/c/server-monitoring/common/utils"
 	_ "github.com/go-sql-driver/mysql"
 	"gopkg.in/redis.v5"
 )

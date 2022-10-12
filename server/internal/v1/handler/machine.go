@@ -11,9 +11,9 @@ import (
 	"os"
 	"strings"
 
-	"bz.service.cloud.monitoring/common/db"
+	"github.com/c/server-monitoring/common/db"
 
-	"bz.service.cloud.monitoring/server/internal/v1/models"
+	"github.com/c/server-monitoring/server/internal/v1/models"
 
 	"github.com/gorilla/websocket"
 
@@ -21,14 +21,14 @@ import (
 
 	"go.uber.org/zap"
 
-	"bz.service.cloud.monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/ubzer"
 
-	"bz.service.cloud.monitoring/server/config"
-	"bz.service.cloud.monitoring/server/internal/v1/params"
+	"github.com/c/server-monitoring/server/config"
+	"github.com/c/server-monitoring/server/internal/v1/params"
 
-	_const "bz.service.cloud.monitoring/common/const"
-	"bz.service.cloud.monitoring/common/utils"
-	"bz.service.cloud.monitoring/server/internal/v1/service"
+	_const "github.com/c/server-monitoring/common/const"
+	"github.com/c/server-monitoring/common/utils"
+	"github.com/c/server-monitoring/server/internal/v1/service"
 	"github.com/labstack/echo"
 )
 
@@ -69,7 +69,7 @@ func SendCom(c echo.Context) error {
 	//h := make(map[string]string)
 	//p := make(map[string]interface{})
 	//p["content"] = param.Content
-	//bytes, err := request.GetParams("http://"+param.Ip+":9093/c/machine/receive/com", h, p)
+	//bytes, err := request.GetParams("http://"+param.Ip+":8888/c/machine/receive/com", h, p)
 	//if err != nil {
 	//	ubzer.MLog.Error("向客户端发送指令请求异常", zap.Error(err))
 	//}

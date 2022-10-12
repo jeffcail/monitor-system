@@ -1,13 +1,14 @@
 package service
 
 import (
-	_const "bz.service.cloud.monitoring/common/const"
-	"bz.service.cloud.monitoring/common/ubzer"
-	"bz.service.cloud.monitoring/server/internal/v1/daos"
-	"bz.service.cloud.monitoring/server/internal/v1/models"
-	"bz.service.cloud.monitoring/server/internal/v1/params"
 	"fmt"
 	"time"
+
+	_const "github.com/c/server-monitoring/common/const"
+	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/server-monitoring/server/internal/v1/daos"
+	"github.com/c/server-monitoring/server/internal/v1/models"
+	"github.com/c/server-monitoring/server/internal/v1/params"
 )
 
 // log query return params list

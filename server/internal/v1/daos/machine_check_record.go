@@ -3,8 +3,8 @@ package daos
 import (
 	"errors"
 
-	"bz.service.cloud.monitoring/common/db"
-	"bz.service.cloud.monitoring/server/internal/v1/models"
+	"github.com/c/server-monitoring/common/db"
+	"github.com/c/server-monitoring/server/internal/v1/models"
 	"github.com/spf13/cast"
 )
 

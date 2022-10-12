@@ -183,6 +183,9 @@
             <el-form-item>
                 服务器密码: <el-input v-model="dialSshForm.password" autocomplete="off" style="width: 200px" />
             </el-form-item>
+            <el-form-item>
+                服务器端口: <el-input v-model="dialSshForm.port" autocomplete="off" style="width: 200px" />
+            </el-form-item>
         </el-form>
 
     <template #footer>
@@ -351,8 +354,9 @@ const sendCommondSubmit = async () => {
 const dialSshVisiableShow = ref(false);
 const dialSshForm = ref({
     ip: "",
-    name: "",
-    password:""
+    name: "root",
+    password:"",
+    port: 22
 })
 
 const showConsole = (row) => {
@@ -360,14 +364,15 @@ const showConsole = (row) => {
     dialSshForm.value.ip = row.ip
     dialSshForm.value.name = row.name
     dialSshForm.value.password = row.password
+
 }
 
-const connectSsh = (row) => {
+const connectSsh = () => {
     // console.log(dialSshForm.value);
     sessionStorage.setItem(`url`, `/monitor/machine/dial`)
     router.push({
         path: "/monitor/machine/dial",
-        query: {ip: row.ip}
+        query: {ip: dialSshForm.value.ip, name: dialSshForm.value.name, password: dialSshForm.value.password, port: dialSshForm.value.port}
     })
 }
 

@@ -10,12 +10,12 @@ import (
 
 	"github.com/spf13/cast"
 
-	"bz.service.cloud.monitoring/client/config"
+	"github.com/c/server-monitoring/client/config"
 
 	"go.uber.org/zap"
 
-	"bz.service.cloud.monitoring/common/ubzer"
-	"bz.service.cloud.monitoring/common/utils"
+	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/utils"
 )
 
 // CheckClientVersion
@@ -26,7 +26,7 @@ func CheckClientVersion() {
 
 	dl := websocket.Dialer{}
 	d := "ws://" + config.Config().GoFileServe + "/client/up"
-	//d := "ws://192.168.0.159:9092/init/client"
+	//d := "ws://192.168.0.159:9999/init/client"
 	conn, _, err := dl.Dial(d, nil)
 	if err != nil {
 		ubzer.MLog.Error(fmt.Sprintf("============ 开始检测升级 连接服务端websocket失败 ============="), zap.Error(err))

@@ -13,13 +13,19 @@ import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 let terminalBox = ref(null)
 let term
 let socket
 let socket2
 const router = useRouter();
+const route = useRoute();
+
+const ip  = ref(route.query.ip);
+const name = ref(route.query.name);
+const password = ref(route.query.password);
+const port = ref(route.query.port);
 
 
 onMounted(() => {
@@ -38,19 +44,25 @@ onMounted(() => {
 
     // 创建socket连接
     term.write('正在连接...\r\n');
-    socket = new WebSocket('ws://127.0.0.1:9092/ssh')
+    socket = new WebSocket("ws://" + location.hostname +  ":9999/ssh")
 
     socket.binaryType = "arraybuffer";
 
     // 打开socket监听事件的方法
     socket.onopen = function () {
+        term.write('连接成功...\r\n');
         fitAddon.fit()
         term.onData(function (data) {
             // socket.send(JSON.stringify({ type: "stdin", data: data }))
+            // console.log(data)
             socket.send(data)
             // console.log(data)
         });
         // ElMessage.success("会话成功连接！")
+        var jsonStr = `{"username":"${name.value}", "ipaddress":"${ip.value}", "port":${port.value}, "password":"${password.value}"}`
+        var datMsg = window.btoa(jsonStr)
+        // socket.send(JSON.stringify({ ip: ip.value, name: name.value, password: password.value }))
+        socket.send(datMsg)
     }
     socket.onclose = function () {
         term.writeln('连接关闭');
@@ -73,10 +85,6 @@ onMounted(() => {
     }, false)
 
 })
-
-const go_out = () => {
-    
-}
 
 
 </script>

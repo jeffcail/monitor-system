@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"time"
 
-	"bz.service.cloud.monitoring/server/internal/v1/models"
+	"github.com/c/server-monitoring/server/internal/v1/models"
 
-	params2 "bz.service.cloud.monitoring/server/internal/v1/params"
+	params2 "github.com/c/server-monitoring/server/internal/v1/params"
 
-	_const "bz.service.cloud.monitoring/common/const"
+	_const "github.com/c/server-monitoring/common/const"
 
 	"go.uber.org/zap"
 
-	"bz.service.cloud.monitoring/common/ubzer"
-	"bz.service.cloud.monitoring/server/internal/v1/daos"
+	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/server-monitoring/server/internal/v1/daos"
 )
 
 type MachineListResult struct {

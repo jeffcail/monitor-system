@@ -6,25 +6,25 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/c/server-monitoring/client/config"
+
 	"github.com/shirou/gopsutil/disk"
 
 	mem2 "github.com/shirou/gopsutil/mem"
 
 	"github.com/shirou/gopsutil/cpu"
 
-	"bz.service.cloud.monitoring/common/utils"
+	"github.com/c/server-monitoring/common/utils"
 
-	"bz.service.cloud.monitoring/common/ubzer"
+	"github.com/c/server-monitoring/common/ubzer"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 )
 
-// 每30秒向服务端推送 客户端 cpu使用率
 // PushClientCpuPercent
 func PushClientCpuPercent() {
 	ip := utils.GetIP()
-	//d := "ws://" + config.Config().GoFileServe + "/client/cpu"
-	url := "ws://192.168.0.159:9092/client/cpu"
+	url := "ws://" + config.Config().GoFileServe + "/client/cpu"
 	dl := websocket.Dialer{}
 	con, _, err := dl.Dial(url, nil)
 	if err != nil {
@@ -56,12 +56,10 @@ func PushClientCpuPercent() {
 	}
 }
 
-// 每30秒向服务端推送 客户端 memory使用率
 // PushClientMemPercent
 func PushClientMemPercent() {
 	ip := utils.GetIP()
-	//d := "ws://" + config.Config().GoFileServe + "/client/mem"
-	url := "ws://192.168.0.159:9092/client/mem"
+	url := "ws://" + config.Config().GoFileServe + "/client/mem"
 	dl := websocket.Dialer{}
 	con, _, err := dl.Dial(url, nil)
 	if err != nil {
@@ -93,12 +91,10 @@ func PushClientMemPercent() {
 	}
 }
 
-// 每30秒向服务端推送 客户端 disk使用率
 // PushClientMemPercent
 func PushClientDiskPercent() {
 	ip := utils.GetIP()
-	//d := "ws://" + config.Config().GoFileServe + "/client/disk"
-	url := "ws://192.168.0.159:9092/client/disk"
+	url := "ws://" + config.Config().GoFileServe + "/client/disk"
 	dl := websocket.Dialer{}
 	con, _, err := dl.Dial(url, nil)
 	if err != nil {

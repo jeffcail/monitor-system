@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"bz.service.cloud.monitoring/common/db"
+	"github.com/c/server-monitoring/common/db"
 )
 
 // SetMachineCode

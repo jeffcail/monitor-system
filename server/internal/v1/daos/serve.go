@@ -6,11 +6,11 @@ import (
 
 	"github.com/go-xorm/xorm"
 
-	"bz.service.cloud.monitoring/common/db"
+	"github.com/c/server-monitoring/common/db"
 
-	"bz.service.cloud.monitoring/server/internal/v1/models"
+	"github.com/c/server-monitoring/server/internal/v1/models"
 
-	params2 "bz.service.cloud.monitoring/server/internal/v1/params"
+	params2 "github.com/c/server-monitoring/server/internal/v1/params"
 )
 
 // ServeList

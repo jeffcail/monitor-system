@@ -5,9 +5,9 @@ import (
 
 	"github.com/go-xorm/xorm"
 
-	"bz.service.cloud.monitoring/common/db"
-	"bz.service.cloud.monitoring/server/internal/v1/models"
-	"bz.service.cloud.monitoring/server/internal/v1/params"
+	"github.com/c/server-monitoring/common/db"
+	"github.com/c/server-monitoring/server/internal/v1/models"
+	"github.com/c/server-monitoring/server/internal/v1/params"
 )
 
 // AddUpgradeClientServeRecord

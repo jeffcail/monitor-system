@@ -3,8 +3,8 @@ package router
 import (
 	"net/http"
 
-	"bz.service.cloud.monitoring/client/config"
-	"bz.service.cloud.monitoring/client/machine"
+	"github.com/c/server-monitoring/client/config"
+	"github.com/c/server-monitoring/client/machine"
 
 	"github.com/labstack/echo"
 )
