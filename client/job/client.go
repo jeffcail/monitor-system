@@ -91,10 +91,11 @@ func PushClientMemPercent() {
 	}
 }
 
-// PushClientMemPercent
+// PushClientDiskPercent
 func PushClientDiskPercent() {
 	ip := utils.GetIP()
 	url := "ws://" + config.Config().GoFileServe + "/client/disk"
+	//url := "ws://192.168.0.159:9092/client/disk"
 	dl := websocket.Dialer{}
 	con, _, err := dl.Dial(url, nil)
 	if err != nil {
@@ -106,24 +107,37 @@ func PushClientDiskPercent() {
 	}
 	parts, err := disk.Partitions(true)
 	if err != nil {
-		ubzer.MLog.Error("获取y硬盘使用率失败", zap.Error(err))
+		fmt.Println(err.Error())
 		return
 	}
-	diskInfo, err := disk.Usage(parts[0].Mountpoint)
-	if err != nil {
-		ubzer.MLog.Error("获取y硬盘使用率失败", zap.Error(err))
-		return
+	fmt.Println(parts)
+
+	var usePercent float64
+	for _, part := range parts {
+		fmt.Println("读取", part)
+		if part.Mountpoint == "/" {
+			diskinfo, err := disk.Usage(part.Mountpoint)
+			if err != nil {
+				//fmt.Println("读取硬盘", part.Mountpoint, "错误:", err.Error())
+				continue
+			}
+			usePercent = diskinfo.UsedPercent
+		}
 	}
-	diskPercent := strconv.FormatInt(int64(diskInfo.UsedPercent), 10)
+
+	diskPercent := strconv.FormatInt(int64(usePercent), 10)
+	fmt.Printf("====== diskPercent: %v\n", diskPercent)
 	type DiskMessage struct {
 		Ip      string `json:"ip"`
 		Percent string `json:"percent"`
 	}
-	m := &DiskMessage{
+
+	ms := &DiskMessage{
 		Ip:      ip,
 		Percent: diskPercent,
 	}
-	res, _ := json.Marshal(m)
+	res, _ := json.Marshal(ms)
+	fmt.Printf("====== disk: %v\n", string(res))
 	err = con.WriteMessage(websocket.TextMessage, res)
 	if err != nil {
 		return
