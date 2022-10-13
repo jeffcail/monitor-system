@@ -12,3 +12,4 @@ server/server.exe
 client/client
 client/client.exe
 server/web/node_modules
+server/web
