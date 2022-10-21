@@ -5,10 +5,10 @@ import (
 	"os"
 	"sync"
 
-	"github.com/c/server-monitoring/client/job"
+	"github.com/c/monitor-system/client/job"
 
-	"github.com/c/server-monitoring/client/bootstarp"
-	"github.com/c/server-monitoring/client/router"
+	"github.com/c/monitor-system/client/bootstarp"
+	"github.com/c/monitor-system/client/router"
 
 	"github.com/kardianos/service"
 )

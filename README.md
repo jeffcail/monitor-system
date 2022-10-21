@@ -1,15 +1,6 @@
-# server-monitorning-upgrade
-基于echo+xorm+mysql+redis+jwt+websocket+vue3+element-plus做的服务器云监控平台 版本2
+# monitor-system
+基于echo+xorm+mysql+redis+jwt+websocket+vue3+element-plus做的服务器云监控平台
 
-版本优化升级
-1. 配置由nacos改为项目配置 ini格式
-2. 客户端操作mysql和redis 改为 与服务端通过websocket通信，由服务端完成之前客户端需要操作mysql和redis
-3. 增加服务端通过ssh连接服务器
-<img src="./connection.png">
-<img src="./console.png">
-
-
-[1版本地址](https://github.com/jeffcail/server-monitor)
 
 # 简介
 分布式云服务监控平台
@@ -21,6 +12,7 @@
 4. 机器: 是客户端所在的服务器，可以是单台也可以是多台。客户端第一次部署，会生成一个唯一的客户端机器码。并提供页面列表输入框鼠标失去焦点标记备注信息。
 服务端可以向某个客户端发送指令、升级客户端等。客户端升级保留最近三份历史记录（回滚暂未写）
 5. 此平台管理员的所有操作将被记录到操作日志中收集
+6. 服务端通过ssh连接服务器
 
 
 ## 部署
@@ -53,4 +45,4 @@ cd /etc/systemd/system && systemctl start cli-service.service
 ```
 
 ### web vue代码
-[server-monitor-web-upgrade](https://github.com/jeffcail/server-monitor-web-upgrade)
+[monitor-system-web](https://github.com/jeffcail/monitor-system-web)

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	_const "github.com/c/server-monitoring/common/const"
-	"github.com/c/server-monitoring/common/utils"
-	"github.com/c/server-monitoring/server/internal/v1/params"
-	"github.com/c/server-monitoring/server/internal/v1/service"
+	_const "github.com/c/monitor-system/common/const"
+	"github.com/c/monitor-system/common/utils"
+	"github.com/c/monitor-system/server/internal/v1/params"
+	"github.com/c/monitor-system/server/internal/v1/service"
 	"github.com/labstack/echo"
 )
 

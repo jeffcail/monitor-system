@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/c/server-monitoring/server/internal/v1/models"
+	"github.com/c/monitor-system/server/internal/v1/models"
 
-	"github.com/c/server-monitoring/server/internal/v1/daos"
+	"github.com/c/monitor-system/server/internal/v1/daos"
 
-	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/monitor-system/common/ubzer"
 
-	"github.com/c/server-monitoring/common/jwt"
+	"github.com/c/monitor-system/common/jwt"
 
 	"github.com/labstack/echo"
 )

@@ -10,12 +10,12 @@ import (
 
 	"github.com/spf13/cast"
 
-	"github.com/c/server-monitoring/client/config"
+	"github.com/c/monitor-system/client/config"
 
 	"go.uber.org/zap"
 
-	"github.com/c/server-monitoring/common/ubzer"
-	"github.com/c/server-monitoring/common/utils"
+	"github.com/c/monitor-system/common/ubzer"
+	"github.com/c/monitor-system/common/utils"
 )
 
 // CheckClientVersion

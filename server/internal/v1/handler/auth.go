@@ -3,13 +3,13 @@ package handler
 import (
 	"net/http"
 
-	_const "github.com/c/server-monitoring/common/const"
+	_const "github.com/c/monitor-system/common/const"
 
 	"github.com/spf13/cast"
 
-	"github.com/c/server-monitoring/common/utils"
-	params2 "github.com/c/server-monitoring/server/internal/v1/params"
-	"github.com/c/server-monitoring/server/internal/v1/service"
+	"github.com/c/monitor-system/common/utils"
+	params2 "github.com/c/monitor-system/server/internal/v1/params"
+	"github.com/c/monitor-system/server/internal/v1/service"
 	"github.com/labstack/echo"
 )
 

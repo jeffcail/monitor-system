@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/c/server-monitoring/common/db"
+	"github.com/c/monitor-system/common/db"
 
 	"go.uber.org/zap"
 
-	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/monitor-system/common/ubzer"
 
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"

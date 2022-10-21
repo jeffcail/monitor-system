@@ -3,8 +3,8 @@ package router
 import (
 	"net/http"
 
-	"github.com/c/server-monitoring/client/config"
-	"github.com/c/server-monitoring/client/machine"
+	"github.com/c/monitor-system/client/config"
+	"github.com/c/monitor-system/client/machine"
 
 	"github.com/labstack/echo"
 )

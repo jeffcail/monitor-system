@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/c/server-monitoring/server/internal/v1/models"
+	"github.com/c/monitor-system/server/internal/v1/models"
 
 	"go.uber.org/zap"
 
-	"github.com/c/server-monitoring/common/ubzer"
-	"github.com/c/server-monitoring/server/internal/v1/daos"
+	"github.com/c/monitor-system/common/ubzer"
+	"github.com/c/monitor-system/server/internal/v1/daos"
 )
 
 var serveState int

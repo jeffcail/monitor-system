@@ -5,17 +5,17 @@ import (
 	"net/http"
 	"strings"
 
-	_const "github.com/c/server-monitoring/common/const"
+	_const "github.com/c/monitor-system/common/const"
 
 	"go.uber.org/zap"
 
-	"github.com/c/server-monitoring/server/internal/v1/daos"
+	"github.com/c/monitor-system/server/internal/v1/daos"
 
-	"github.com/c/server-monitoring/common/jwt"
+	"github.com/c/monitor-system/common/jwt"
 
-	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/monitor-system/common/ubzer"
 
-	"github.com/c/server-monitoring/common/utils"
+	"github.com/c/monitor-system/common/utils"
 	"github.com/labstack/echo"
 )
 

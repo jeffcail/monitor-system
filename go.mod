@@ -1,4 +1,4 @@
-module github.com/c/server-monitoring
+module github.com/c/monitor-system
 
 go 1.17
 

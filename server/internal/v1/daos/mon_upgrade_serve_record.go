@@ -5,9 +5,9 @@ import (
 
 	"github.com/go-xorm/xorm"
 
-	"github.com/c/server-monitoring/common/db"
-	"github.com/c/server-monitoring/server/internal/v1/models"
-	"github.com/c/server-monitoring/server/internal/v1/params"
+	"github.com/c/monitor-system/common/db"
+	"github.com/c/monitor-system/server/internal/v1/models"
+	"github.com/c/monitor-system/server/internal/v1/params"
 )
 
 // AddUpgradeServeRecord

@@ -7,19 +7,19 @@ import (
 
 	"github.com/spf13/cast"
 
-	_const "github.com/c/server-monitoring/common/const"
-	"github.com/c/server-monitoring/common/utils"
-	params2 "github.com/c/server-monitoring/server/internal/v1/params"
+	_const "github.com/c/monitor-system/common/const"
+	"github.com/c/monitor-system/common/utils"
+	params2 "github.com/c/monitor-system/server/internal/v1/params"
 
-	"github.com/c/server-monitoring/common/db"
+	"github.com/c/monitor-system/common/db"
 
 	"github.com/gorilla/websocket"
 
-	"github.com/c/server-monitoring/server/internal/v1/daos"
+	"github.com/c/monitor-system/server/internal/v1/daos"
 
 	"go.uber.org/zap"
 
-	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/monitor-system/common/ubzer"
 	"github.com/labstack/echo"
 )
 

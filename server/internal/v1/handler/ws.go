@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/monitor-system/common/ubzer"
 	"go.uber.org/zap"
 
 	"github.com/spf13/cast"
 
-	_const "github.com/c/server-monitoring/common/const"
-	"github.com/c/server-monitoring/common/utils"
-	"github.com/c/server-monitoring/server/connections"
+	_const "github.com/c/monitor-system/common/const"
+	"github.com/c/monitor-system/common/utils"
+	"github.com/c/monitor-system/server/connections"
 	"github.com/labstack/echo"
 )
 

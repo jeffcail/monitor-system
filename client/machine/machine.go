@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/c/server-monitoring/client/config"
+	"github.com/c/monitor-system/client/config"
 
 	"github.com/gorilla/websocket"
 
@@ -14,8 +14,8 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/c/server-monitoring/common/ubzer"
-	"github.com/c/server-monitoring/common/utils"
+	"github.com/c/monitor-system/common/ubzer"
+	"github.com/c/monitor-system/common/utils"
 )
 
 // GenerateUniqueMachineCode

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/c/server-monitoring/common/db"
+	"github.com/c/monitor-system/common/db"
 )
 
 // SetMachineCode

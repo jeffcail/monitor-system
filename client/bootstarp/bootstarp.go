@@ -1,10 +1,10 @@
 package bootstarp
 
 import (
-	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/monitor-system/common/ubzer"
 
-	"github.com/c/server-monitoring/client/config"
-	"github.com/c/server-monitoring/client/machine"
+	"github.com/c/monitor-system/client/config"
+	"github.com/c/monitor-system/client/machine"
 )
 
 // InitBoot

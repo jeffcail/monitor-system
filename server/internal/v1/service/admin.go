@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"time"
 
-	_const "github.com/c/server-monitoring/common/const"
-	"github.com/c/server-monitoring/common/ubzer"
-	"github.com/c/server-monitoring/server/config"
-	"github.com/c/server-monitoring/server/internal/v1/daos"
-	"github.com/c/server-monitoring/server/internal/v1/models"
-	params "github.com/c/server-monitoring/server/internal/v1/params"
-	"github.com/c/server-monitoring/server/utils"
+	_const "github.com/c/monitor-system/common/const"
+	"github.com/c/monitor-system/common/ubzer"
+	"github.com/c/monitor-system/server/config"
+	"github.com/c/monitor-system/server/internal/v1/daos"
+	"github.com/c/monitor-system/server/internal/v1/models"
+	params "github.com/c/monitor-system/server/internal/v1/params"
+	"github.com/c/monitor-system/server/utils"
 	"go.uber.org/zap"
 )
 

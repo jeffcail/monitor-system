@@ -3,13 +3,13 @@ package router
 import (
 	"time"
 
-	"github.com/c/server-monitoring/server/internal/v1/handler"
+	"github.com/c/monitor-system/server/internal/v1/handler"
 
-	"github.com/c/server-monitoring/common/middlewares"
-	"github.com/c/server-monitoring/common/ubzer"
-	"github.com/c/server-monitoring/server/bootstarp"
-	"github.com/c/server-monitoring/server/config"
-	middle "github.com/c/server-monitoring/server/internal/v1/middlewares"
+	"github.com/c/monitor-system/common/middlewares"
+	"github.com/c/monitor-system/common/ubzer"
+	"github.com/c/monitor-system/server/bootstarp"
+	"github.com/c/monitor-system/server/config"
+	middle "github.com/c/monitor-system/server/internal/v1/middlewares"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )

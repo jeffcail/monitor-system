@@ -11,9 +11,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/c/server-monitoring/common/db"
+	"github.com/c/monitor-system/common/db"
 
-	"github.com/c/server-monitoring/server/internal/v1/models"
+	"github.com/c/monitor-system/server/internal/v1/models"
 
 	"github.com/gorilla/websocket"
 
@@ -21,14 +21,14 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/monitor-system/common/ubzer"
 
-	"github.com/c/server-monitoring/server/config"
-	"github.com/c/server-monitoring/server/internal/v1/params"
+	"github.com/c/monitor-system/server/config"
+	"github.com/c/monitor-system/server/internal/v1/params"
 
-	_const "github.com/c/server-monitoring/common/const"
-	"github.com/c/server-monitoring/common/utils"
-	"github.com/c/server-monitoring/server/internal/v1/service"
+	_const "github.com/c/monitor-system/common/const"
+	"github.com/c/monitor-system/common/utils"
+	"github.com/c/monitor-system/server/internal/v1/service"
 	"github.com/labstack/echo"
 )
 

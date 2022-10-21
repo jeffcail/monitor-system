@@ -1,6 +1,6 @@
 package config
 
-import _conf "github.com/c/server-monitoring/client/conf"
+import _conf "github.com/c/monitor-system/client/conf"
 
 var (
 	config *_conf.MonitorConfig

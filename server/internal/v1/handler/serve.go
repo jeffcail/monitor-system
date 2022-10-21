@@ -8,17 +8,17 @@ import (
 	"os"
 	"strings"
 
-	"github.com/c/server-monitoring/server/config"
+	"github.com/c/monitor-system/server/config"
 
-	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/monitor-system/common/ubzer"
 	"github.com/spf13/cast"
 	"go.uber.org/zap"
 
-	"github.com/c/server-monitoring/server/internal/v1/service"
+	"github.com/c/monitor-system/server/internal/v1/service"
 
-	_const "github.com/c/server-monitoring/common/const"
-	"github.com/c/server-monitoring/common/utils"
-	"github.com/c/server-monitoring/server/internal/v1/params"
+	_const "github.com/c/monitor-system/common/const"
+	"github.com/c/monitor-system/common/utils"
+	"github.com/c/monitor-system/server/internal/v1/params"
 	"github.com/labstack/echo"
 )
 

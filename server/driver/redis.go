@@ -1,7 +1,7 @@
 package driver
 
 import (
-	"github.com/c/server-monitoring/common/utils"
+	"github.com/c/monitor-system/common/utils"
 	_ "github.com/go-sql-driver/mysql"
 	"gopkg.in/redis.v5"
 )

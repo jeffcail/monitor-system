@@ -3,8 +3,8 @@ package service
 import (
 	"strconv"
 
-	_const "github.com/c/server-monitoring/common/const"
-	"github.com/c/server-monitoring/server/internal/v1/daos"
+	_const "github.com/c/monitor-system/common/const"
+	"github.com/c/monitor-system/server/internal/v1/daos"
 )
 
 // MenusListView

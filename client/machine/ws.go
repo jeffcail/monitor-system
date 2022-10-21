@@ -7,9 +7,9 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/c/server-monitoring/common/ubzer"
+	"github.com/c/monitor-system/common/ubzer"
 
-	"github.com/c/server-monitoring/common/utils"
+	"github.com/c/monitor-system/common/utils"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"
 )

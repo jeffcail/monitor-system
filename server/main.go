@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/c/server-monitoring/server/internal/v1/job"
-	"github.com/c/server-monitoring/server/router"
+	"github.com/c/monitor-system/server/internal/v1/job"
+	"github.com/c/monitor-system/server/router"
 
 	_ "net/http/pprof"
 )
