@@ -1,8 +1,8 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"log"
 	"os"
 	"sync"
 
@@ -13,14 +13,6 @@ import (
 
 	"github.com/kardianos/service"
 )
-
-var (
-	workDir = flag.String("d", "/root/client", "Configuration file working directory")
-)
-
-func init() {
-	flag.Parse()
-}
 
 type program struct {
 	log service.Logger
@@ -34,7 +26,7 @@ func (p *program) Start(s service.Service) error {
 
 func (p *program) run() {
 
-	bootstarp.InitBoot(*workDir)
+	bootstarp.InitBoot()
 	job.BeginJob()
 	router.RunClientServer()
 
@@ -48,11 +40,18 @@ func (p *program) Stop(s service.Service) error {
 var wg sync.WaitGroup
 
 func main() {
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Printf("=========== 获取当前工作目录失败: %v", err)
+	}
+	log.Printf("========= 工作目录dir: %v", wd)
+
 	wg.Add(1)
 	svcConfig := &service.Config{
 		Name:        "client-monitor",
 		DisplayName: "client-monitor",
 		Description: "client-monitor",
+		WorkingDirectory: wd,
 	}
 	prg := &program{}
 	s, err := service.New(prg, svcConfig)
