@@ -1,7 +1,9 @@
 package _conf
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/go-ini/ini"
 )
@@ -16,10 +18,20 @@ type MonitorConfig struct {
 }
 
 // LoadMonitorConfig
-func LoadMonitorConfig() *MonitorConfig {
+func LoadMonitorConfig(d string) *MonitorConfig {
 	var err error
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Printf("=========== 获取当前工作目录失败: %v", err)
+	}
+	log.Printf("========== 当前工作目录: %v", dir)
+	log.Printf("========== 目录命令行参数: %v", d)
 
-	Cfg, err = ini.Load("/root/client/conf/conf.ini")
+	wd := fmt.Sprintf("%s%s", d, "/conf.ini")
+	log.Printf("========== 配置文件目录: %v", wd)
+	//  ========== 配置文件目录: /root/client/conf/conf.ini
+
+	Cfg, err = ini.Load(wd)
 	//Cfg, err = ini.Load("conf/conf.ini")
 	if err != nil {
 		log.Fatal(2, "Fail to parse conf", err)

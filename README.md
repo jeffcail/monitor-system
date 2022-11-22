@@ -39,7 +39,7 @@ nohup ./server > nohup.out & echo $! > pidfile.txt
 客户端注册成系统服务
 
 ```shell
-./client install
+./client install -d workDir
 
 cd /etc/systemd/system && systemctl start cli-service.service
 ```

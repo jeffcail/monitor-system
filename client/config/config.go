@@ -11,6 +11,6 @@ func Config() *_conf.MonitorConfig {
 }
 
 // ParseConfig
-func ParseConfig() {
-	config = _conf.LoadMonitorConfig()
+func ParseConfig(d string) {
+	config = _conf.LoadMonitorConfig(d)
 }

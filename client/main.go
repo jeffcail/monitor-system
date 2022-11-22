@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"sync"
@@ -12,6 +13,14 @@ import (
 
 	"github.com/kardianos/service"
 )
+
+var (
+	workDir = flag.String("d", "/root/client", "Configuration file working directory")
+)
+
+func init() {
+	flag.Parse()
+}
 
 type program struct {
 	log service.Logger
@@ -25,7 +34,7 @@ func (p *program) Start(s service.Service) error {
 
 func (p *program) run() {
 
-	bootstarp.InitBoot()
+	bootstarp.InitBoot(*workDir)
 	job.BeginJob()
 	router.RunClientServer()
 

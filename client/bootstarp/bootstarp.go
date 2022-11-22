@@ -8,13 +8,13 @@ import (
 )
 
 // InitBoot
-func InitBoot() {
-	parseRemoteConfig()
+func InitBoot(d string) {
+	parseRemoteConfig(d)
 	ubzer.InitLogger(config.Config().ClientLoggerPath)
 	machine.GenerateUniqueMachineCode()
 }
 
 // parseRemoteConfig
-func parseRemoteConfig() {
-	config.ParseConfig()
+func parseRemoteConfig(d string) {
+	config.ParseConfig(d)
 }
