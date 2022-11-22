@@ -46,3 +46,26 @@ cd /etc/systemd/system && systemctl start cli-service.service
 
 ### web vue代码
 [monitor-system-web](https://github.com/jeffcail/monitor-system-web)
+
+### 效果
+##### 首页
+![首页](./board.png)
+
+##### 管理员账号
+![管理员账号](./admin.png)
+
+##### 服务监测
+![服务监测](./server.png)
+
+##### 客户端机器
+![客户端机器](./client.png)
+
+##### 连接客户端机器
+![连接客户端机器](./ssh.png)
+
+##### 连接客户端机器成功
+![连接客户端机器成功](./ssh2.png)
+
+##### log
+![log](./log.png)
+
